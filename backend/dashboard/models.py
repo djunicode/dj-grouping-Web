@@ -1,7 +1,10 @@
 from django.db import models
 from datetime import datetime
 from accounts.models import MyUser
-
+from phonenumber_field.modelfields import PhoneNumberField
+###Imports for auth Token
+from django.conf import settings
+from rest_framework.authtoken.models import Token
 # Create your models here.
 
 # Create Groups(Tanish), Events(Tanish)
@@ -12,10 +15,45 @@ from django.dispatch import receiver
 
 # Create your models here.
 
-# Create Groups(Tanish), Events(Tanish)
+class UserProfile(models.Model):
+    user            = models.OneToOneField(MyUser,on_delete=models.CASCADE)
+    name            = models.CharField(max_length=250)
+    branch          = models.CharField(max_length=250)
+    year_of_passing = models.IntegerField()
+    sap_id          = models.CharField(max_length=12)
+    mobile_no       = PhoneNumberField(null=False,blank=False,unique=True)
+    profile_pic     = models.ImageField(upload_to='profile/',default='profile/default.jpg')
+    barcode         = models.ImageField(upload_to='barcode/', blank=True)
+    bio             = models.TextField()
+    verified        = models.BooleanField(default=False)
+    def __str__(self):
+        return self.name
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
+class OceanQuestion(models.Model):
+    traits = (
+        ('Open', "Openness"),
+        ('Agg', "Agreeableness"),
+        ('Ext', "Extraversion")
+    )
+    persontrait = models.TextField(choices=traits)
+    weight = models.IntegerField()
+    question = models.TextField()
+
+    def __str__(self):
+        return (self.persontrait + str(self.pk))
+
+class OceanAnswer(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    answer = models.IntegerField()
+    quesinst = models.OneToOneField(OceanQuestion, on_delete=models.CASCADE)
 
 class Group(models.Model):
-    group_individual=models.ManyToManyField(MyUser)
+    group_individual=models.ManyToManyField(UserProfile)
     group_id= models.AutoField(primary_key=True)
     group_name= models.CharField(max_length=255,blank=False, unique=True)
     group_desc=models.CharField(max_length=255,blank=False)
@@ -25,7 +63,7 @@ class Group(models.Model):
         return self.group_name
 
 
-class Events(models.Model):
+class Event(models.Model):
     event_id= models.AutoField(primary_key=True)
     event_name= models.CharField(max_length=255, blank=False, unique= True)
     event_desc= models.CharField(max_length=255, blank=False)
@@ -44,14 +82,14 @@ class Events(models.Model):
             send_mail()
     """
 
-class EventRegisterations(models.Model):
+class EventRegisteration(models.Model):
     er_id=models.AutoField(primary_key=True)
     us_id=models.IntegerField(blank=True)
-    user=models.ForeignKey(MyUser,null=True,blank=True,on_delete=models.CASCADE)
+    user=models.ForeignKey(UserProfile,null=True,blank=True,on_delete=models.CASCADE)
     grp_name=models.CharField(max_length=255,blank=True)
     group=models.ForeignKey(Group,null=True, blank=True,on_delete=models.CASCADE)
     eve_id=models.IntegerField(blank=True)
-    event= models.ForeignKey(Events,null=True,blank=True,on_delete=models.CASCADE)
+    event= models.ForeignKey(Event,null=True,blank=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.grp_name
@@ -59,15 +97,15 @@ class EventRegisterations(models.Model):
 class AllEventsForGroup(models.Model):
     AEFG_id= models.AutoField(primary_key=True)
     group_name= models.OneToOneField(Group, on_delete=models.CASCADE)
-    group_events= models.ManyToManyField(Events)
+    group_events= models.ManyToManyField(Event)
 
     def __str__(self):
         return self.group_name.group_name
 
 class AllEventsForUser(models.Model):
     AEFU_id= models.AutoField(primary_key=True)
-    user_name= models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    group_events= models.ManyToManyField(Events)
+    user_name= models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+    group_events= models.ManyToManyField(Event)
 
     def __str__(self):
         return self.user_name.email
@@ -75,13 +113,14 @@ class AllEventsForUser(models.Model):
 
 
 
-@receiver(post_save, sender =Group)
-def create_AEFG(sender,instance = None, created = False, **kwargs):
-    if created:
-        AllEventsForGroup.objects.create(group_name=instance)
+# @receiver(post_save, sender =Group)
+# def create_AEFG(sender,instance = None, created = False, **kwargs):
+#     if created:
+#         AllEventsForGroup.objects.create(group_name=instance)
 
 
-@receiver(post_save, sender =MyUser)
-def create_AEFU(sender,instance = None, created = False, **kwargs):
-    if created:
-        AllEventsForUser.objects.create(user_name=instance)
+# @receiver(post_save, sender =MyUser)
+# def create_AEFU(sender,instance = None, created = False, **kwargs):
+#     if created:
+#         up_inst = UserProfile.objects.get(user=instance)
+#         AllEventsForUser.objects.create(user_name=up_inst)

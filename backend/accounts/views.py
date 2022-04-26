@@ -10,6 +10,7 @@ from .serializers import *
 from .utils import Util
 from django.urls import reverse
 from django.contrib.auth.models import update_last_login
+from utils.barcodescan import BarcodeScan ###Refer to the utils folder and you'll understand for more info visit this https://www.youtube.com/watch?v=IOhZqmSrjlE
 
 class Registration(generics.CreateAPIView):
     serializer_class=RegistrationSerializer
@@ -58,10 +59,10 @@ def verifyEmail(request):
         Token.objects.create(user = user)#Creaating new token
         new_token = Token.objects.get(user = user).key#Fetching that token
         data['new_token'] = new_token#Passing it in Response
-        return Response(data)
+        return Response(data, status=status.HTTP_200_OK)
     else:
-        data={'status':'Email Not Verified'}#If user has not verified the email
-        return Response(data)
+        data={'status':'Email is Verified'}#If user has not verified the email
+        return Response(data, status=status.HTTP_200_OK)
 
 #View for logging in
 class LoginView(generics.CreateAPIView):
