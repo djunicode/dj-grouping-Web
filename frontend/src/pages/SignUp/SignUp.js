@@ -16,10 +16,16 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    var requestOptions = {
+      method: 'POST',
+      body: data,
+      redirect: 'follow'
+    };
+    
+    fetch("http://omshukla.pythonanywhere.com/accounts/register/", requestOptions)
+      .then(response => response.json())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
   };
 
   return (
