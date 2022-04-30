@@ -2,9 +2,13 @@ from django.db import models
 from datetime import datetime
 from accounts.models import MyUser
 from phonenumber_field.modelfields import PhoneNumberField
+import cv2
+from pyzbar.pyzbar import decode
+from django.db.models.signals import post_save
 ###Imports for auth Token
 from django.conf import settings
 from rest_framework.authtoken.models import Token
+import os
 # Create your models here.
 
 # Create Groups(Tanish), Events(Tanish)
@@ -15,25 +19,50 @@ from django.dispatch import receiver
 
 # Create your models here.
 
+from django.utils.deconstruct import deconstructible
+
+@deconstructible
+class PathAndRename(object):
+
+    def __init__(self, sub_path):
+        self.path = sub_path
+
+    def __call__(self, instance, filename):
+        ext = filename.split('.')[-1]
+        filename = '{}{}{}.{}'.format(instance.first_name,instance.last_name,instance.year_of_passing,ext)
+        return os.path.join(self.path, filename)
+
+
+
 class UserProfile(models.Model):
     user            = models.OneToOneField(MyUser,on_delete=models.CASCADE)
-    name            = models.CharField(max_length=250)
+    first_name      = models.CharField(max_length=250)
+    last_name       = models.CharField(max_length=250)
     branch          = models.CharField(max_length=250)
     year_of_passing = models.IntegerField()
-    sap_id          = models.CharField(max_length=12)
+    sap_id          = models.CharField(max_length=12,blank=True,null=True)
     mobile_no       = PhoneNumberField(null=False,blank=False,unique=True)
-    profile_pic     = models.ImageField(upload_to='profile/',default='profile/default.jpg')
-    barcode         = models.ImageField(upload_to='barcode/', blank=True)
+    profile_pic     = models.ImageField(upload_to=PathAndRename('profile/'),default='profile/default.jpg')
+    barcode         = models.ImageField(upload_to=PathAndRename('barcode/'),blank=True)
     bio             = models.TextField()
-    verified        = models.BooleanField(default=False)
     def __str__(self):
-        return self.name
+        return self.first_name+self.last_name
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
+@receiver(post_save, sender = UserProfile)
+def verify_student(sender,instance,created,*args,**kwargs):
+    img = cv2.imread("media/barcode/{}{}{}.jpeg".format(instance.first_name,instance.last_name,instance.year_of_passing))
+    b=str(decode(img)[0][0])[3:14]
+    if instance.sap_id!=b:
+        instance.sap_id=b
+        instance.save()
+
+        
 class OceanQuestion(models.Model):
     traits = (
         ('Open', "Openness"),
