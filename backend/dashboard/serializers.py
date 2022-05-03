@@ -49,3 +49,8 @@ class OceanAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model=OceanAnswer
         fields='__all__'
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UserProfile
+        fields='__all__'

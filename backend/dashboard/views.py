@@ -116,3 +116,11 @@ class OceanAnswersView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
     
+
+class UserProfileAPI(generics.ListCreateAPIView):
+    queryset=UserProfile.objects.all()
+    serializer_class=UserProfileSerializer
+
+class UserProfileUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset=UserProfile.objects.all()
+    serializer_class=UserProfileSerializer
