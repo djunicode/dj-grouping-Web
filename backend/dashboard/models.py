@@ -2,13 +2,14 @@ from django.db import models
 from datetime import datetime
 from accounts.models import MyUser
 from phonenumber_field.modelfields import PhoneNumberField
-import cv2
+# import cv2
 from pyzbar.pyzbar import decode
 from django.db.models.signals import post_save
 ###Imports for auth Token
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 import os
+from PIL import Image
 # Create your models here.
 
 # Create Groups(Tanish), Events(Tanish)
@@ -56,7 +57,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 @receiver(post_save, sender = UserProfile)
 def verify_student(sender,instance,created,*args,**kwargs):
-    img = cv2.imread("media/barcode/{}{}{}.jpeg".format(instance.first_name,instance.last_name,instance.year_of_passing))
+    img = Image.open("media/barcode/{}{}{}.jpeg".format(instance.first_name,instance.last_name,instance.year_of_passing))
     b=str(decode(img)[0][0])[3:14]
     if instance.sap_id!=b:
         instance.sap_id=b
