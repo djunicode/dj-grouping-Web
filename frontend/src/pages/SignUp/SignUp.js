@@ -9,6 +9,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./SignUp.scss";
+import Swal from "sweetalert2";
 
 const theme = createTheme();
 
@@ -17,15 +18,32 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       body: data,
-      redirect: 'follow'
+      redirect: "follow",
     };
-    
-    fetch("http://omshukla.pythonanywhere.com/accounts/register/", requestOptions)
-      .then(response => response.json())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
+
+    fetch(
+      "http://omshukla.pythonanywhere.com/accounts/register/",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.old_token)
+          Swal.fire({
+            icon: "success",
+            title: "SignUp Successful!",
+            text: "Check your mail for email verification",
+          });
+        else
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+      })
+      .catch((error) => console.log("error", error));
   };
 
   return (

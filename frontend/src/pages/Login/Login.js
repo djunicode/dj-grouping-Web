@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./Login.scss";
+import Swal from 'sweetalert2'
 
 const theme = createTheme();
 
@@ -35,7 +36,16 @@ var requestOptions = {
 
 fetch("http://omshukla.pythonanywhere.com/accounts/login/", requestOptions)
   .then(response => response.json())
-  .then(result => saveToken(result.token,result.user_id))
+  .then(result => {saveToken(result.token,result.user_id)
+  if(result.token)
+  console.log("fjrfn")
+  else
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: 'Please enter valid credentials',
+  })
+  })
   .catch(error => console.log('error', error));
   };
 
