@@ -10,7 +10,7 @@ from .serializers import *
 from .utils import Util
 from django.urls import reverse
 from django.contrib.auth.models import update_last_login
-from utils.barcodescan import BarcodeScan ###Refer to the utils folder and you'll understand for more info visit this https://www.youtube.com/watch?v=IOhZqmSrjlE
+# from utils.barcodescan import BarcodeScan ###Refer to the utils folder and you'll understand for more info visit this https://www.youtube.com/watch?v=IOhZqmSrjlE
 
 class Registration(generics.CreateAPIView):
     serializer_class=RegistrationSerializer
