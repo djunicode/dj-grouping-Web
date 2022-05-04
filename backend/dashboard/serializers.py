@@ -54,3 +54,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=UserProfile
         fields='__all__'
+
+class InterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Interest
+        fields=['name']

@@ -13,4 +13,5 @@ urlpatterns = [
     path('oceanans/<str:sap>/',OceanAnswersView.as_view()),
     path('userprofile/',UserProfileAPI.as_view()),
     path('userprofile-update/<int:pk>/',UserProfileUpdateAPI.as_view()),
+    path('interest/<str:sap>',InterestAPI.as_view()),
 ]
