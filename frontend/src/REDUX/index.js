@@ -1,1 +1,1 @@
-export * from './Signup_redux/signupAction'
+export * from './Actions/signupAction'

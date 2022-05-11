@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./SignUp.scss";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux'
-import { signup } from "../../REDUX/Signup_redux/signupAction";
+import { signup } from "../../REDUX";
 import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
