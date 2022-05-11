@@ -5,7 +5,7 @@ from django.shortcuts import render
 from accounts.models import MyUser
 
 from .serializers import *
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from rest_framework import mixins
 
 from .models import *
@@ -54,6 +54,7 @@ class AllEventsForGroupAPI(generics.ListCreateAPIView):
 class AllEventsForUserAPI(generics.ListCreateAPIView):
     queryset=AllEventsForUser.objects.all()
     serializer_class=AllEventsForUserSerializer
+
 class EventRegisterationsAPI(generics.ListCreateAPIView):
     queryset=EventRegisteration.objects.all()
     serializer_class=EventRegisterationsSerializer
@@ -124,3 +125,21 @@ class UserProfileAPI(generics.ListCreateAPIView):
 class UserProfileUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset=UserProfile.objects.all()
     serializer_class=UserProfileSerializer
+
+class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = InterestSerializer
+    
+    def get_queryset(self):
+        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        return Interest.objects.filter(user = user_pro)
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        names = request.data['name']
+        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        for name in names:
+            interest = Interest(user=user_pro, name=name)
+            interest.save()
+        return JsonResponse({'status':'created'}, status=status.HTTP_201_CREATED)

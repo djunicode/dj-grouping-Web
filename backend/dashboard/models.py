@@ -1,10 +1,10 @@
+from enum import Enum
 from django.db import models
 from datetime import datetime
 from accounts.models import MyUser
 from phonenumber_field.modelfields import PhoneNumberField
-# import cv2
 from pyzbar.pyzbar import decode
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 ###Imports for auth Token
 from django.conf import settings
 from rest_framework.authtoken.models import Token
@@ -62,6 +62,14 @@ def verify_student(sender,instance,created,*args,**kwargs):
     if instance.sap_id!=b:
         instance.sap_id=b
         instance.save()
+
+
+class Interest(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    name = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
         
 class OceanQuestion(models.Model):
