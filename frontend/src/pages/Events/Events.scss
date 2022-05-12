@@ -1,11 +1,16 @@
-.events{
-    padding: 3% 5%;
+.events {
+  padding: 3% 1%;
+  background-color: #151c20;
+  color: #fff;
 
-    .events_card{
-        // height: 321px;
-        // width: 283px;
-    }
-    .events_image{
-        height: 239px;
-    }
+  .events_card {
+    height: 321px;
+    // width: 283px;
+  }
+  .events_box {
+    padding: 0 2% 2% 2%;
+  }
+  .events_image {
+    height: 239px;
+  }
 }
