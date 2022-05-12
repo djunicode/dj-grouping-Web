@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useState } from "react";
 // import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,40 +12,17 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./Login.scss";
-import Swal from 'sweetalert2'
 
 const theme = createTheme();
 
 export default function Login() {
-  const [auth,setAuth]=useState()
-    const saveToken = (userToken,userId) => {
-      sessionStorage.setItem('token', JSON.stringify(userToken));
-      sessionStorage.setItem('user_id', JSON.stringify(userId))
-      setAuth(userToken)
-    };
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
-var requestOptions = {
-  method: 'POST',
-  body: data,
-  redirect: 'follow'
-};
-
-fetch("http://omshukla.pythonanywhere.com/accounts/login/", requestOptions)
-  .then(response => response.json())
-  .then(result => {saveToken(result.token,result.user_id)
-  if(result.token)
-  console.log("fjrfn")
-  else
-  Swal.fire({
-    icon: 'error',
-    title: 'Oops...',
-    text: 'Please enter valid credentials',
-  })
-  })
-  .catch(error => console.log('error', error));
+    console.log({
+      email: data.get("email"),
+      password: data.get("password"),
+    });
   };
 
   return (
