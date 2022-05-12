@@ -15,14 +15,14 @@ const Events = () => {
         Upcoming Events
       </Typography>
       <center>
-      <Box sx={{ flexGrow: 1 }} className="events_box">
+      <Box sx={{ flexGrow: 1 }}>
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
           {Array.from(Array(4)).map((_, index) => (
-            <Grid item xs={6} sm={4} md={3} key={index}>
+            <Grid item xs={2} sm={4} md={3} key={index}>
               <Card className="events_card">
                 <CardActionArea>
                   <CardMedia
@@ -34,7 +34,7 @@ const Events = () => {
                   />
                   <CardContent>
                     <Divider></Divider>
-                    <Typography gutterBottom variant="h6" component="div" className="events_name">
+                    <Typography gutterBottom variant="h6" component="div">
                       HackPrep 3.0
                     </Typography>
                   </CardContent>
@@ -49,14 +49,14 @@ const Events = () => {
         Hackathons
       </Typography>
       <center>
-      <Box sx={{ flexGrow: 1 }} className="events_box">
+      <Box sx={{ flexGrow: 1 }}>
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
           {Array.from(Array(4)).map((_, index) => (
-            <Grid item xs={6} sm={4} md={3} key={index}>
+            <Grid item xs={2} sm={4} md={3} key={index}>
               <Card className="events_card">
                 <CardActionArea>
                   <CardMedia
