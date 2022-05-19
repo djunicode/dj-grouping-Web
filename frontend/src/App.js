@@ -12,14 +12,13 @@ function App() {
   return (
     <div className="App">
       <Provider store={store} >
-
         <Router>
           <Routes>
             <Route exact path="/" element={<><SignUp /></>} />
             <Route exact path="/login" element={<><Login /></>} />
             <Route exact path="/events" element={<><Events /></>} />
             <Route exact path="/createprofile" element={<><Profile /></>} />
-            <Route exact path="/profile" element={<><ProfileScreen /></>} />
+            <Route exact path="/profile/:id" element={<><ProfileScreen /></>} />
             <Route exact path="/groupformed" element={<><GroupFormed /></>} />
           </Routes>
         </Router>
