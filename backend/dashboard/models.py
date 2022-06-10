@@ -96,7 +96,7 @@ class Group(models.Model):
     group_name= models.CharField(max_length=255,blank=False, unique=True)
     group_desc=models.CharField(max_length=255,blank=False)
     group_members=models.IntegerField(default=4)
-    #group_picture=models.ImageField (upload_to='images/')
+    group_picture=models.ImageField (upload_to=PathAndRename('images/'),default='images/default.jpg')
     def __str__(self):
         return self.group_name
 
@@ -108,7 +108,7 @@ class Event(models.Model):
     event_start_date= models.DateField(auto_now_add=False)
     event_end_date =models.DateField(auto_now_add=False)
     event_commitee =models.CharField(max_length=255, blank=False)
-    
+    event_picture=models.ImageField (upload_to=PathAndRename('events/'),default='events/unicode.jpg')
     event_groups = models.ManyToManyField(Group ,blank= True)
 
     def __str__(self):
