@@ -22,7 +22,7 @@ const ProfileScreen = () => {
     <div>
       <Paper elevation={3} className="ProfileData">
         {loading ? (
-          <h3>loading</h3>
+          <h3>loading...</h3>
         ) : error ? (
           <h3>error</h3>
         ) : (

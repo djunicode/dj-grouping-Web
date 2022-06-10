@@ -20,7 +20,7 @@ export default function SignUp() {
 
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userSignup = useSelector(state => state.signUp)
   // const { loading , error , userToken } = userSignup 
@@ -65,7 +65,7 @@ export default function SignUp() {
         text: "Check your mail for email verification",
       });
       
-      // useNavigate('')
+      navigate("/login");
       
     }
 
