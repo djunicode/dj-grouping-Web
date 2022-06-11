@@ -22,15 +22,16 @@ export const signup = (email, password) => async (dispatch) => {
         )
             .then((res) => {
 
-                if (res.data.email) {
-                    console.log(res.data.email);
+                // if (res.data.email) {
+                //     console.log(res.data.email);
 
-                    dispatch({
-                        type: FAILURE_SIGNUP_TOKEN,
-                        payload: res.data.email,
-                    })
-                }
-                else if (res.data.old_token) {
+                //     dispatch({
+                //         type: FAILURE_SIGNUP_TOKEN,
+                //         payload: res.data.email,
+                //     })
+                // }
+                // else
+                 if (res.data.old_token) {
                     console.log(res.data.old_token);
 
                     dispatch({
