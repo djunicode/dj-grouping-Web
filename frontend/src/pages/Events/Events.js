@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -18,9 +18,22 @@ const Events = () => {
 
   const { loading, error, userEvents } = viewEvents;
 
+  const [data, setData] = useState([]);
+
   useEffect(() => {
     dispatch(ViewEvents());
   }, [dispatch]);
+
+  useEffect(()=>{
+    console.log(userEvents)
+    if(userEvents){
+      setData(userEvents)
+    }
+  },[userEvents]);
+
+useEffect(()=>{
+  console.log(data.length)
+},[data]);
 
   return (
     <div className="events">
@@ -40,7 +53,7 @@ const Events = () => {
                 spacing={{ xs: 2, md: 3 }}
                 columns={{ xs: 4, sm: 8, md: 12 }}
               >
-                {userEvents.map((_, index) => (
+                {data.map((_, index) => (
                   <Grid item xs={6} sm={4} md={3} key={index}>
                     <Card className="events_card">
                       <CardActionArea>
@@ -59,8 +72,7 @@ const Events = () => {
                             component="div"
                             className="events_name"
                           >
-                            event name
-                            {userEvents.event_name}                           
+                            {_.event_name}                           
                           </Typography>
                         </CardContent>
                       </CardActionArea>
@@ -80,7 +92,7 @@ const Events = () => {
                 spacing={{ xs: 2, md: 3 }}
                 columns={{ xs: 4, sm: 8, md: 12 }}
               >
-                {userEvents.map((_, index) => (
+                {data.map((_, index) => (
                   <Grid item xs={6} sm={4} md={3} key={index}>
                     <Card className="events_card">
                       <CardActionArea>
@@ -94,7 +106,7 @@ const Events = () => {
                         <CardContent>
                           <Divider></Divider>
                           <Typography gutterBottom variant="h6" component="div">
-                          {userEvents.event_name}
+                          {_.event_name}
                           </Typography>
                         </CardContent>
                       </CardActionArea>
