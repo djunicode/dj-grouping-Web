@@ -1,0 +1,19 @@
+.btn {
+    background-color: #151C20;
+    font-family: "Source Serif 4", sans-serif;
+    font-weight: 500;
+    border: 3px solid transparent;
+    text-transform: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    &:hover{
+        border-bottom: 3px solid white;
+    }
+  }
+
+  .avatar{
+    border: 1px solid white;
+    background: #151C20 !important;
+  }
