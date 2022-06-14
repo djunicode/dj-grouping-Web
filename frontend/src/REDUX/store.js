@@ -12,6 +12,7 @@ const initalState ={
     userToken : { userToken : tokenFromStorage},
     loginToken : { loginToken : loginTokenStorage},
     user_id : { user_id : idFromStorage },
+    GroupFormedData : [],
 }
 
 const store = createStore(rootReducer ,initalState , composeWithDevTools(applyMiddleware(thunk)))
