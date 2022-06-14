@@ -96,7 +96,7 @@ class Group(models.Model):
     group_name= models.CharField(max_length=255,blank=False, unique=True)
     group_desc=models.CharField(max_length=255,blank=False)
     group_members=models.IntegerField(default=4)
-    group_picture=models.ImageField(upload_to=PathAndRename('groups/'),default='images/default.jpg')
+    group_picture=models.ImageField(upload_to=PathAndRename('groups/'),default='groups/default.jpg')
     def __str__(self):
         return self.group_name
 
