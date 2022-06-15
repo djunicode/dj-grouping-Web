@@ -56,7 +56,7 @@ export default function SignUp() {
         text: "Something went wrong!",
       });
     }
-    else if (userSignup.userToken) {
+    else if (!userSignup.userToken) {
       console.log(userSignup.userToken);
 
       Swal.fire({

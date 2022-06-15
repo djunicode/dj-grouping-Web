@@ -46,7 +46,7 @@ export default function Login() {
         title: "Oops...",
         text: "Incorrect password!",
       });
-    } else if (userLogin.loginToken) {
+    } else if (!userLogin.loginToken) {
       console.log(userLogin.loginToken);
 
       Swal.fire({
