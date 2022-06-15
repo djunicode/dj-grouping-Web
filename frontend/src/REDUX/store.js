@@ -6,13 +6,15 @@ import thunk from 'redux-thunk'
 
 const tokenFromStorage = localStorage.getItem('userToken')? JSON.parse(localStorage.getItem('userToken')) : null
 const loginTokenStorage = localStorage.getItem('loginToken')? JSON.parse(localStorage.getItem('loginToken')) : null
-const idFromStorage = localStorage.getItem('user_id')? JSON.parse(localStorage.getItem('user_id')) : null
+const idFromStorage = localStorage.getItem('user_id')? (localStorage.getItem('user_id')) : null;
 
 const initalState ={
     userToken : { userToken : tokenFromStorage},
     loginToken : { loginToken : loginTokenStorage},
-    user_id : { user_id : idFromStorage },
+    // user_id  : idFromStorage ,
+    GroupFormedData : [],
 }
+
 
 const store = createStore(rootReducer ,initalState , composeWithDevTools(applyMiddleware(thunk)))
 export default store;
