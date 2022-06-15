@@ -83,7 +83,7 @@ class OceanQuestion(models.Model):
     question = models.TextField()
 
     def __str__(self):
-        return (self.persontrait + str(self.pk))
+        return self.pk
 
 class OceanAnswer(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
