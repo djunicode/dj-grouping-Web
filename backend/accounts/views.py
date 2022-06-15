@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
@@ -30,10 +31,11 @@ class Registration(generics.CreateAPIView):
                 #Creation of E-Mail
                 email_body = 'Hi ' + 'Use link below to verify your email \n' + absurl  
                 data_email = {'email_body': email_body, 'to_email': my_user.email, 'email_subject':'Verify your email'}     
-                Util.send_email(data_email)           
+                Util.send_email(data_email)
+                return JsonResponse(data=data,status=status.HTTP_201_CREATED)         
             else:
                 data=serializer.errors
-            return Response(data)
+                return JsonResponse(data=data,status=status.HTTP_400_BAD_REQUEST)
 
 #E-Mail Verification
 @api_view(['GET'])

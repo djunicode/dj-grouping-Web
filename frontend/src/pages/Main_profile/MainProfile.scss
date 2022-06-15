@@ -1,0 +1,39 @@
+.profileImage{
+    width: 130px;
+    border-radius: 50%;
+}
+
+.editProfileLink{
+  color: #FF4E00;
+  text-decoration: none;
+  position: relative;
+//   left: 120px;
+  top: -10px;
+}
+
+
+.ProfileData{
+    background-color: #101619;
+    margin: 8% 20%;
+    padding: 2.3%;
+    text-align: center;
+
+    .profileGrid{
+     padding: 2% 35%;
+    }
+
+    .profileDetails{
+        color: #256EDD;
+    }
+
+    .profileDetailsFilled{
+        color: #5A9CFF;
+    }
+}
+
+@media (max-width:600px){
+.ProfileData{
+    margin: 8% 5%;
+
+}
+}

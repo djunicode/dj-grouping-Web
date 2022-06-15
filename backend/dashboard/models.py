@@ -30,7 +30,16 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        filename = '{}{}{}.{}'.format(instance.first_name,instance.last_name,instance.year_of_passing,ext)
+        try:
+            filename = '{}{}{}.{}'.format(instance.first_name,instance.last_name,instance.year_of_passing,ext)
+        except:
+            try:
+                filename = '{}.{}'.format(instance.group_name,ext)
+            except:
+                try:
+                    filename = '{}.{}'.format(instance.event_name,ext)
+                except:
+                    raise Exception()
         return os.path.join(self.path, filename)
 
 
@@ -46,6 +55,7 @@ class UserProfile(models.Model):
     profile_pic     = models.ImageField(upload_to=PathAndRename('profile/'),default='profile/default.jpg')
     barcode         = models.ImageField(upload_to=PathAndRename('barcode/'),blank=True)
     bio             = models.TextField()
+    
     def __str__(self):
         return self.first_name+self.last_name
 
@@ -83,7 +93,7 @@ class OceanQuestion(models.Model):
     question = models.TextField()
 
     def __str__(self):
-        return (self.persontrait + str(self.pk))
+        return str(self.pk)
 
 class OceanAnswer(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -91,12 +101,13 @@ class OceanAnswer(models.Model):
     quesinst = models.OneToOneField(OceanQuestion, on_delete=models.CASCADE)
 
 class Group(models.Model):
-    group_individual=models.ManyToManyField(UserProfile)
+    group_individual=models.ManyToManyField(UserProfile, blank=True)
     group_id= models.AutoField(primary_key=True)
     group_name= models.CharField(max_length=255,blank=False, unique=True)
     group_desc=models.CharField(max_length=255,blank=False)
     group_members=models.IntegerField(default=4)
-    #group_picture=models.ImageField (upload_to='images/')
+    group_picture=models.ImageField(upload_to=PathAndRename('groups/'),default='groups/default.jpg')
+
     def __str__(self):
         return self.group_name
 
@@ -108,7 +119,7 @@ class Event(models.Model):
     event_start_date= models.DateField(auto_now_add=False)
     event_end_date =models.DateField(auto_now_add=False)
     event_commitee =models.CharField(max_length=255, blank=False)
-    
+    event_picture=models.ImageField(upload_to=PathAndRename('events/'),default='events/unicode.jpg')
     event_groups = models.ManyToManyField(Group ,blank= True)
 
     def __str__(self):
@@ -148,6 +159,13 @@ class AllEventsForUser(models.Model):
     def __str__(self):
         return self.user_name.email
 
+class UserGroupRequest(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    join = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user.sap_id) + " " + str(self.group.group_id)
 
 
 
