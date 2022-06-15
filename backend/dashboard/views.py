@@ -143,3 +143,28 @@ class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gener
             interest = Interest(user=user_pro, name=name)
             interest.save()
         return JsonResponse({'status':'created'}, status=status.HTTP_201_CREATED)
+
+class UserRequestsView(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserRequestSerializer
+
+    def get_queryset(self):
+        return UserGroupRequest.objects.filter(user = self.kwargs['user_id'])
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class UserGroupRequestView(mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = UserGroupRequestSerializer
+    queryset = UserGroupRequest.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserGroupRequestSerializer(data = request.data)
+        if serializer.is_valid():
+            temp = dict(serializer.validated_data)
+            if temp['join']:
+                serializer.accept(serializer.validated_data)
+                return JsonResponse({'status':'Group request accepted'}, status=status.HTTP_200_OK)
+            else:
+                serializer.reject(serializer.validated_data)
+                return JsonResponse({'status':'Group request rejected'}, status=status.HTTP_200_OK)
+        return JsonResponse({'error':'Server Problem'}, status=status.HTTP_400_BAD_REQUEST)
