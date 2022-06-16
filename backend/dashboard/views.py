@@ -5,7 +5,7 @@ from django.shortcuts import render
 from accounts.models import MyUser
 
 from .serializers import *
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from rest_framework import mixins
 
 from .models import *
@@ -23,7 +23,7 @@ class GroupApi(generics.ListCreateAPIView):
 
 
 class EventsApi(generics.ListCreateAPIView):
-    queryset=Events.objects.all()
+    queryset=Event.objects.all()
     serializer_class=EventsSerializer
     
 class EventsChangeAPI(mixins.RetrieveModelMixin,
@@ -31,7 +31,7 @@ class EventsChangeAPI(mixins.RetrieveModelMixin,
                     mixins.DestroyModelMixin,
                     generics.GenericAPIView):
     
-    queryset = Events.objects.all()
+    queryset = Event.objects.all()
     serializer_class = EventsSerializer
 
     def get(self, request, *args, **kwargs):
@@ -54,8 +54,9 @@ class AllEventsForGroupAPI(generics.ListCreateAPIView):
 class AllEventsForUserAPI(generics.ListCreateAPIView):
     queryset=AllEventsForUser.objects.all()
     serializer_class=AllEventsForUserSerializer
+
 class EventRegisterationsAPI(generics.ListCreateAPIView):
-    queryset=EventRegisterations.objects.all()
+    queryset=EventRegisteration.objects.all()
     serializer_class=EventRegisterationsSerializer
     def post(self,request):
         serializer=EventRegisterationsSerializer(data=request.data)
@@ -63,7 +64,7 @@ class EventRegisterationsAPI(generics.ListCreateAPIView):
             serializer.save()
             print(serializer.data)
             # TO GET CURRENT EVENT REGISTERATION
-            curr_er=EventRegisterations.objects.get(er_id=serializer.data['er_id'])
+            curr_er=EventRegisteration.objects.get(er_id=serializer.data['er_id'])
             # TO GET CURRENT USER
             curr_user_id=serializer.data['us_id']
             curr_user=MyUser.objects.get(user_id=int(curr_user_id))
@@ -77,7 +78,7 @@ class EventRegisterationsAPI(generics.ListCreateAPIView):
             curr_er.group=curr_grp
             # TO GET CURRENT EVENT 
             curr_eve_id=serializer.data['eve_id']
-            curr_eve=Events.objects.get(event_id=int(curr_eve_id))
+            curr_eve=Event.objects.get(event_id=int(curr_eve_id))
             # SETTING IN THAT EVENT THAT PARTICULAR GROUP
             curr_eve.event_groups.add(*[curr_grp])
             curr_er.event=curr_eve
@@ -90,3 +91,55 @@ class EventRegisterationsAPI(generics.ListCreateAPIView):
             curr_er.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors)
+
+
+
+
+### OCEAN APIS
+
+class OceanQuestionsView(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = OceanQuestion.objects.all()
+    serializer_class = OceanQuestionSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request,*args,**kwargs)
+
+class OceanAnswersView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = OceanAnswerSerializer
+
+    def get_queryset(self):
+        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        return OceanAnswer.objects.filter(user=user_pro)
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+
+class UserProfileAPI(generics.ListCreateAPIView):
+    queryset=UserProfile.objects.all()
+    serializer_class=UserProfileSerializer
+
+class UserProfileUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset=UserProfile.objects.all()
+    serializer_class=UserProfileSerializer
+
+class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = InterestSerializer
+    
+    def get_queryset(self):
+        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        return Interest.objects.filter(user = user_pro)
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        names = request.data['name']
+        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        for name in names:
+            interest = Interest(user=user_pro, name=name)
+            interest.save()
+        return JsonResponse({'status':'created'}, status=status.HTTP_201_CREATED)

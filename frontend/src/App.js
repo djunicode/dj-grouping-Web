@@ -9,6 +9,7 @@ import GroupFormed from './pages/Groups/GroupFormed';
 import { Provider } from 'react-redux';
 import store from './REDUX/store';
 import Navbar from './pages/Navbar/Navbar';
+import QnA from './pages/QnA/QnA';
 function App() {
   return (
     <div className="App">
@@ -21,6 +22,7 @@ function App() {
             <Route exact path="/createprofile" element={<><Navbar/><Profile /></>} />
             <Route exact path="/profile/:id" element={<><Navbar/><ProfileScreen /></>} />
             <Route exact path="/groupformed" element={<><Navbar/><GroupFormed /></>} />
+            <Route exact path="/oceanques" element={<><Navbar/><QnA /></>} />
           </Routes>
         </Router>
       </Provider>

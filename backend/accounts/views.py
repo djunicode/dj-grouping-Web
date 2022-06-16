@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
@@ -10,6 +11,7 @@ from .serializers import *
 from .utils import Util
 from django.urls import reverse
 from django.contrib.auth.models import update_last_login
+# from utils.barcodescan import BarcodeScan ###Refer to the utils folder and you'll understand for more info visit this https://www.youtube.com/watch?v=IOhZqmSrjlE
 
 class Registration(generics.CreateAPIView):
     serializer_class=RegistrationSerializer
@@ -29,10 +31,11 @@ class Registration(generics.CreateAPIView):
                 #Creation of E-Mail
                 email_body = 'Hi ' + 'Use link below to verify your email \n' + absurl  
                 data_email = {'email_body': email_body, 'to_email': my_user.email, 'email_subject':'Verify your email'}     
-                Util.send_email(data_email)           
+                Util.send_email(data_email)
+                return JsonResponse(data=data,status=status.HTTP_201_CREATED)         
             else:
                 data=serializer.errors
-            return Response(data)
+                return JsonResponse(data=data,status=status.HTTP_400_BAD_REQUEST)
 
 #E-Mail Verification
 @api_view(['GET'])
@@ -58,10 +61,10 @@ def verifyEmail(request):
         Token.objects.create(user = user)#Creaating new token
         new_token = Token.objects.get(user = user).key#Fetching that token
         data['new_token'] = new_token#Passing it in Response
-        return Response(data)
+        return Response(data, status=status.HTTP_200_OK)
     else:
-        data={'status':'Email Not Verified'}#If user has not verified the email
-        return Response(data)
+        data={'status':'Email is Verified'}#If user has not verified the email
+        return Response(data, status=status.HTTP_200_OK)
 
 #View for logging in
 class LoginView(generics.CreateAPIView):

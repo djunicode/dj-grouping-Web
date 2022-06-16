@@ -24,3 +24,16 @@
     z-index:-9;
     font-family:"Poppins",
 }
+
+.QnA_button {
+    background-color: #ffc800;
+    border-radius: 20px;
+    padding: 1% 7%;
+    float: right;
+    text-transform: none;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    &:hover {
+      background-color: #ffc800;
+    }
+  }
