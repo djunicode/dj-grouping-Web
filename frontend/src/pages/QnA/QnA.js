@@ -53,7 +53,7 @@ const QnA = () => {
             }}
           >
             <CardContent>
-            <Button className="QnA_button" onClick={answerReq}>Proceed</Button>
+            {/* <Button className="QnA_button" onClick={answerReq}>Proceed</Button> */}
               <Typography
                 variant="h4"
                 component="h2"
@@ -105,6 +105,7 @@ const QnA = () => {
                 })
               }
             </CardContent>
+            <Button className="QnA_button" onClick={answerReq}>Proceed</Button>
           </Card>
         </Box>
       </Container>
