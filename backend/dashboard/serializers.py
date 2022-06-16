@@ -1,3 +1,4 @@
+from dataclasses import field
 from rest_framework import serializers
 from .models import *
 
@@ -5,11 +6,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields='__all__'
-
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields=['first_name','last_name','branch','year_of_passing',
+        'sap_id','mobile_no','bio','profile_pic']
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model=Group
-        fields="__all__"
+        fields=["group_id","group_individual","group_name",
+        "group_desc","group_members","joining_sap",
+        "group_picture"]
 
 
 class EventsSerializer(serializers.ModelSerializer):
@@ -59,3 +66,18 @@ class InterestSerializer(serializers.ModelSerializer):
     class Meta:
         model=Interest
         fields=['name']
+
+class GroupSuggestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=GroupSuggestions
+        fields="__all__"
+
+class UserSuggestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UserSuggested
+        fields="__all__"
+
+class UserJoinedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UserJoined
+        fields="__all__"
