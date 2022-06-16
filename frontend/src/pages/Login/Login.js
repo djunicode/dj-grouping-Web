@@ -75,7 +75,7 @@ export default function Login() {
             square
             style={{ backgroundColor: "#151C20" }}
           >
-            <Box
+            {/* <Box
               sx={{
                 my: 8,
                 mx: 4,
@@ -83,7 +83,7 @@ export default function Login() {
                 flexDirection: "column",
                 alignItems: "center",
               }}
-            >
+            > */}
               {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar> */}
@@ -91,10 +91,12 @@ export default function Login() {
                 <Typography
                   component="h1"
                   variant="h4"
-                  style={{ fontFamily: "Poppins" }}
+                  style={{ fontFamily: "Poppins" , fontWeight: 700,fontSize:'2.4rem' }}
                 >
                   Login
                 </Typography>
+              <br />
+
                 <Box
                   component="form"
                   noValidate
@@ -109,7 +111,7 @@ export default function Login() {
                     Email
                   </Typography>
                   <TextField
-                    margin="normal"
+                    // margin="normal"
                     required
                     fullWidth
                     id="email"
@@ -120,6 +122,8 @@ export default function Login() {
                     autoFocus
                     style={{ backgroundColor: "white" }}
                   />
+                  <br />
+                <br />
                   <Typography
                     component="h1"
                     variant="h6"
@@ -128,7 +132,7 @@ export default function Login() {
                     Password
                   </Typography>
                   <TextField
-                    margin="normal"
+                    // margin="normal"
                     required
                     fullWidth
                     name="password"
@@ -147,12 +151,14 @@ export default function Login() {
                     type="submit"
                     fullWidth
                     variant="contained"
+                  style={{fontSize:'1rem',fontWeight:'600'}}
+
                     sx={{
                       mt: 3,
                       mb: 2,
                       color: "#151C20",
                       "&:hover": {
-                        backgroundColor: "#FFC800",
+                        backgroundColor: "#FFB103",
                       },
                     }}
                   >
@@ -164,20 +170,21 @@ export default function Login() {
                     Forgot password?
                   </Link>
                 </Grid> */}
-                    <Grid item>
+                    {/* <Grid item> */}
                       <Link
                         to="/"
-                        variant="body2"
-                        style={{ color: "white", fontFamily: "Poppins" }}
+                        // variant="body2"
+                        // style={{ color: "white", fontFamily: "Poppins" }}
+                        className="SignLink"
                       >
                         {"Don't have an account? Sign Up"}
                       </Link>
-                    </Grid>
+                    {/* </Grid> */}
                   </Grid>
                   {/* <Copyright sx={{ mt: 5 }} /> */}
                 </Box>
               </div>
-            </Box>
+            {/* </Box> */}
           </Grid>
           <Grid
             item
@@ -185,13 +192,14 @@ export default function Login() {
             sm={4}
             md={6}
             sx={{
-              backgroundImage: "url(https://source.unsplash.com/random)",
+              backgroundImage: "url(https://img.freepik.com/free-vector/flat-trendy-fashion-portraits-cover-set_52683-67138.jpg?t=st=1655346530~exp=1655347130~hmac=7563b4c7376adefc72040e3a8092958ad2f18eca8f403b6dc0805294ff6c9c1a&w=996)",
               backgroundRepeat: "no-repeat",
-              backgroundColor: (t) =>
-                t.palette.mode === "light"
-                  ? t.palette.grey[50]
-                  : t.palette.grey[900],
-              backgroundSize: "cover",
+              // backgroundColor: (t) =>
+              //   t.palette.mode === "light"
+              //     ? t.palette.grey[50]
+              //     : t.palette.grey[900],
+              backgroundSize: "contain",
+              backgroundColor:'#FFB103',
               backgroundPosition: "center",
             }}
           />
