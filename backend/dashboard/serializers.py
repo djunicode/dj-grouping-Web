@@ -8,11 +8,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields='__all__'
-class UserUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields=['first_name','last_name','branch','year_of_passing',
-        'sap_id','mobile_no','bio','profile_pic']
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model=Group

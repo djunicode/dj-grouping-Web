@@ -64,7 +64,7 @@ class EventsChangeAPI(mixins.RetrieveModelMixin,
     serializer_class = EventsSerializer
 
     def get(self, request, *args, **kwargs):
-    
+        
         return self.retrieve(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -100,9 +100,9 @@ class EventRegisterationsAPI(generics.ListCreateAPIView):
             # SETTING USER IN THE MODEL
             curr_er.user=curr_user
             # TO GET THE GRP NAME
-            curr_grp_id=serializer.data['grp_id']
+            curr_grp_name=serializer.data['grp_name']
             # TO GET CURRENT GROUP OBJECT
-            curr_grp=Group.objects.get(group_id=curr_grp_id)
+            curr_grp=Group.objects.get(group_name=curr_grp_name)
             # SETTING IT
             curr_er.group=curr_grp
             # TO GET CURRENT EVENT 
@@ -153,7 +153,7 @@ class UserProfileAPI(generics.ListCreateAPIView):
 
 class UserProfileUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset=UserProfile.objects.all()
-    serializer_class=UserUpdateSerializer
+    serializer_class=UserProfileSerializer
 
 class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = InterestSerializer

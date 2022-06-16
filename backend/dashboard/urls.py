@@ -4,7 +4,6 @@ from .views import *
 
 urlpatterns = [
     path('group/',GroupApi.as_view()),
-    path('groupchange/<str:pk>/',GroupChangeAPI.as_view()),
     path('events/',EventsApi.as_view()),
     path('groupevents/',AllEventsForGroupAPI.as_view()),
     path('individualevents/',AllEventsForUserAPI.as_view()),
