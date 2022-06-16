@@ -12,7 +12,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model=Group
-        fields="__all__"
+        fields=["group_id","group_individual","group_name",
+        "group_desc","group_members",
+        "group_picture"]
 
 
 class EventsSerializer(serializers.ModelSerializer):

@@ -42,7 +42,7 @@ class MyUser(AbstractUser):
     user_id   = models.AutoField(primary_key=True)
     username  = None
     email     = models.EmailField(max_length=255,unique=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     objects  = UserManager()
     
