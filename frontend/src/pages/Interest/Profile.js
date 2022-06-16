@@ -2,16 +2,16 @@ import React from "react";
 import { Typography, Card, CardContent, Box, Grid, Button } from "@mui/material";
 import "./Profile.scss";
 
-const Profile = () => {
+const Interest = () => {
   return (
-    <div style={{ backgroundColor: "#151C20"}} className="profile">
+    <div style={{ backgroundColor: "#151C20" }} className="profile">
       <Typography
         gutterBottom
         variant="h4"
         component="div"
         className="profile_heading"
       >
-        Create Your Profile
+        Create Your Profile by adding Interests
       </Typography>
       <Box
         sx={{
@@ -32,7 +32,7 @@ const Profile = () => {
                   columns={{ xs: 4, sm: 8, md: 12 }}
                 >
                   {Array.from(Array(8)).map((_, index) => (
-                    <Grid item xs={12} sm={4} md={3} key={index} className="profile_grid">
+                    <Grid item xs={2} sm={4} md={3} key={index}>
                       <div className="profile_interests">Photography</div>
                     </Grid>
                   ))}
@@ -50,7 +50,7 @@ const Profile = () => {
                   columns={{ xs: 4, sm: 8, md: 12 }}
                 >
                   {Array.from(Array(8)).map((_, index) => (
-                    <Grid item xs={12} sm={4} md={3} key={index} className="profile_grid">
+                    <Grid item xs={2} sm={4} md={3} key={index}>
                       <div className="profile_interests">Photography</div>
                     </Grid>
                   ))}
@@ -65,4 +65,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Interest;
