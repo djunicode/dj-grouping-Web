@@ -7,17 +7,19 @@ import Swal from "sweetalert2";
 import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { createprofile } from "../../REDUX";
 
 
 const INITIAL_FORM_STATE = {
   first_name: "",
   last_name: "",
   sapId: "",
-  year: "",
+  year_of_passing: "",
   branch: "",
   bio: "",
   user: "",
-  phone: "",
+  mobile_no: "",
 };
 
 const FORM_VALIDATION = Yup.object().shape({
@@ -27,19 +29,41 @@ const FORM_VALIDATION = Yup.object().shape({
     .integer()
     .typeError("Please enter a valid SapId")
     .required("This field is Required"),
-  year: Yup.number().required("This field is Required"),
+  year_of_passing: Yup.number().required("This field is Required"),
   branch: Yup.string().required("This field is Required"),
   bio: Yup.string().required("This field is Required"),
   first_name: Yup.string().required("This field is Required"),
   last_name: Yup.string().required("This field is Required"),
-  phone: Yup.string().required("This field is Required")
+  mobile_no: Yup.string().required("This field is Required")
     .matches(/^[6-9]\d{9}$/, "Phone number is not valid"),
 });
 
+const apireq = (rawdata) => {
+  const user = localStorage.getItem("user_id");
+  console.log({ ...rawdata, user: user})
+  axios.post(
+    "https://omshukla.pythonanywhere.com/dashboard/userprofile/",
+    { ...rawdata, user: user},
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  )
+  .then((res) => {
+    console.log(res.data);
+    localStorage.setItem("name", JSON.stringify(res.data.first_name));
+    localStorage.setItem("user_id", JSON.stringify(res.data.id));
+  });
+}
+
 const Profile_Create = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const createProfile = useSelector((state) => state.createProfile);
   const [details, setDetails] = useState([]);
- 
+  const [notes, setNotes] = useState([]);
+
 
   return (
     <div style={{ backgroundColor: "#F8F8F8" }}>
@@ -71,45 +95,32 @@ const Profile_Create = () => {
                   initialValues={{ ...INITIAL_FORM_STATE }}
                   validationSchema={FORM_VALIDATION}
                   onSubmit={(values) => {
-                    var data = JSON.stringify({
-                      email_id: `${details.email}`,
-                      phone_no: `+91${values.phone}`,
+                    console.log(notes);
+                    var data = {
+                      first_name: `${values.first_name}`,
+                      last_name: `${values.last_name}`,
+                      mobile_no: `+91${values.mobile_no}`,
                       sap_id: `${values.sapId}`,
-                      current_year: `${values.year}`,
-                      department: `${values.branch}`,
-                      domains: `${values.domains}`,
-                      skills: `${values.skills}`,
-                      resume_drive_link: `${values.resume}`,
-                      project_drive_link: `${values.project}`,
-                      graduation_year: "2024",
+                      year_of_passing: `${values.year_of_passing}`,
+                      branch: `${values.branch}`,
                       user: `${localStorage.getItem("id")}`,
-                    });
-
-                    console.log(data);
-                    navigate("/interest");
-                //     var config = {
-                //       method: "POST",
-                //       url: "http://djacmdev.pythonanywhere.com/if/student",
-                //       headers: {
-                //         "Content-Type": "application/json",
-                //         Authorization: `Token ${localStorage.getItem("token")}`,
-                //       },
-                //       data: data,
-                //     };
-
-                //     axios(config)
-                //       .then(function (response) {
-                //         console.log(JSON.stringify(response.data));
-                //         navigate('/dashboard')
-                //         Swal.fire({
-                //           title: "Profile Saved!",
-                //           icon: "success",
-                //           // confirmButtonText: 'Cool'
-                //         });
-                //       })
-                //       .catch(function (error) {
-                //         console.log(error);
-                //       });
+                      bio: `${values.bio}`,
+                      barcode: notes,
+                    };
+                    apireq(data);
+                    // dispatch(createprofile(
+                    //   `${values.first_name}`,
+                    //   `${values.last_name}`,
+                    //   `+91${values.mobile_no}`,
+                    //   `${values.sapId}`,
+                    //   `${values.year_of_passing}`,
+                    //   `${values.branch}`,
+                    //   `${localStorage.getItem("id")}`,
+                    //   `${values.bio}`,
+                    //   notes));
+                    if(localStorage.getItem("name")){
+                      navigate("/interest");
+                    }
                   }}
                 >
                   <Form>
@@ -118,7 +129,7 @@ const Profile_Create = () => {
                         <div>First Name</div>
                         <TextField
                           name="first_name"
-                          placeholder={details.first_name}
+                          // placeholder={details.first_name}
                           // type="email"
                           required
                           style={{ color: "black" }}
@@ -128,7 +139,7 @@ const Profile_Create = () => {
                         <div>Last Name</div>
                         <TextField
                           name="last_name"
-                          placeholder={details.last_name}
+                          // placeholder={details.last_name}
                           // type="email"
                           required
                           style={{ color: "black" }}
@@ -137,7 +148,7 @@ const Profile_Create = () => {
                       <Grid item md={6} xs={12}>
                         <div>Phone Number</div>
                         <TextField
-                          name="phone"
+                          name="mobile_no"
                           placeholder="Phone number"
                         // required
                         />
@@ -155,7 +166,7 @@ const Profile_Create = () => {
                       </Grid>
                       <Grid item md={6} xs={12}>
                         <div>Year of passing</div>
-                        <TextField name="year" placeholder="Add year" />
+                        <TextField name="year_of_passing" placeholder="Add year" />
                       </Grid>
 
                       <Grid item md={6} xs={12}>
@@ -169,15 +180,19 @@ const Profile_Create = () => {
                           name="bio"
                           multiline
                           placeholder="Add bio"
-                        required
+                          required
                         />
                       </Grid>
                       <Grid item md={6} xs={12}>
-                        <div>user</div>
-                        <TextField
-                          name="user"
-                          placeholder="user"
-                        required
+                        <div>Barcode</div>
+                        <input
+                          name="barcode"
+                          type='file'
+                          onChange={(e) => { 
+                            console.log(e.target.files[0]);
+                            setNotes(e.target.files[0]) }}
+                            // setNotes(URL.createObjectURL(e.target.files[0])) }}
+                          placeholder="barcode"
                         />
                       </Grid>
 
