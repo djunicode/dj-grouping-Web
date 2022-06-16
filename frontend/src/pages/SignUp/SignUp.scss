@@ -1,19 +1,25 @@
 .signup{
     background-color: #101619;
-  height: 82vh;
-  width: 450px;
-  padding: 40px;
+  // height: 82vh;
+  // width: 450px;
+  // padding: 40px;
+  padding:10%;
+  height: 100vh;
   color: #FFF;
   font-family:Poppins;
 
   Button{
-    background-color:#FFC800;
+    background-color:#FFB103;
      font-family:"Poppins";
      height:50px;
      font-size:1.2rem;
   }
-  Link{
+  .SignLink{
     color:white;
     font-family:Poppins;
+  }
+
+  .SignLink:hover{
+    color: #FFB103;
   }
 }

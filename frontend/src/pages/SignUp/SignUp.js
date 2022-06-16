@@ -64,9 +64,9 @@ export default function SignUp() {
         title: "SignUp Successful!",
         text: "Check your mail for email verification",
       });
-      
+
       navigate("/login");
-      
+
     }
 
     //       Swal.fire({
@@ -99,7 +99,7 @@ export default function SignUp() {
             square
             style={{ backgroundColor: "#151C20" }}
           >
-            <Box
+            {/* <Box
               sx={{
                 my: 8,
                 mx: 4,
@@ -111,99 +111,103 @@ export default function SignUp() {
               {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar> */}
-              <div className="signup">
+            <div className="signup">
+              <Typography
+                component="h1"
+                variant="h4"
+                style={{ fontFamily: "Poppins", fontWeight: 700,fontSize:'2.4rem' }}
+              >
+                Signup
+              </Typography>
+              <br />
+              <Box
+                component="form"
+                noValidate
+                onSubmit={handleSubmit}
+                sx={{ mt: 1 }}
+              >
                 <Typography
                   component="h1"
-                  variant="h4"
+                  variant="h6"
                   style={{ fontFamily: "Poppins" }}
                 >
-                  Signup
+                  Email
                 </Typography>
-                <Box
-                  component="form"
-                  noValidate
-                  onSubmit={handleSubmit}
-                  sx={{ mt: 1 }}
+                <TextField
+                  // margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  // label="Email"
+                  placeholder="Email"
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  autoFocus
+                  style={{ backgroundColor: "white" }}
+                />
+                <br />
+                <br />
+                <Typography
+                  component="h1"
+                  variant="h6"
+                  style={{ fontFamily: "Poppins" }}
                 >
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    style={{ fontFamily: "Poppins" }}
-                  >
-                    Email
-                  </Typography>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    // label="Email"
-                    placeholder="Email"
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="email"
-                    autoFocus
-                    style={{ backgroundColor: "white" }}
-                  />
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    style={{ fontFamily: "Poppins" }}
-                  >
-                    Password
-                  </Typography>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
+                  Password
+                </Typography>
+                <TextField
+                  // margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
 
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    style={{ backgroundColor: "white" }}
-                  />
-                  {/* <FormControlLabel
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  style={{ backgroundColor: "white" }}
+                />
+                {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               /> */}
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{
-                      mt: 3,
-                      mb: 2,
-                      color: "#151C20",
-                      "&:hover": {
-                        backgroundColor: "#FFC800",
-                      },
-                    }}
-                  >
-                    Create an account
-                  </Button>
-                  <Grid container>
-                    {/* <Grid item xs>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  style={{fontSize:'1rem',fontWeight:'600'}}
+                  sx={{
+                    mt: 3,
+                    mb: 2,
+                    color: "#151C20",
+                    "&:hover": {
+                      backgroundColor: "#FFB103",
+                    },
+                  }}
+                >
+                  Create an account
+                </Button>
+                {/* <Grid container> */}
+                  {/* <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid> */}
-                    <Grid item>
-                      <Link
-                        to="/login"
-                        variant="body2"
-                        style={{ color: "white", fontFamily: "Poppins" }}
-                      >
-                        {"Already have an account? Login"}
-                      </Link>
-                    </Grid>
-                  </Grid>
-                  {/* <Copyright sx={{ mt: 5 }} /> */}
-                </Box>
-              </div>
-            </Box>
+                  {/* <Grid item> */}
+                    <Link
+                      to="/login"
+                      // variant="body2"
+                      // style={{ color: "white", fontFamily: "Poppins",fontSize:"1rem",textAlign:'right' }}
+                      className="SignLink"
+                    >
+                      {"Already have an account? Login"}
+                    </Link>
+                  {/* </Grid> */}
+                {/* </Grid> */}
+              </Box>
+            </div>
+            {/* </Box> */}
           </Grid>
           <Grid
             item
@@ -211,13 +215,14 @@ export default function SignUp() {
             sm={4}
             md={6}
             sx={{
-              backgroundImage: "url(https://source.unsplash.com/random)",
+              backgroundImage: "url(https://img.freepik.com/free-vector/flat-trendy-fashion-portraits-cover-pack_52683-67139.jpg?t=st=1655329395~exp=1655329995~hmac=978413a271a39f3c3da0d747f947608d89318b6195426e22122a6b83832fdd9b&w=996)",
               backgroundRepeat: "no-repeat",
-              backgroundColor: (t) =>
-                t.palette.mode === "light"
-                  ? t.palette.grey[50]
-                  : t.palette.grey[900],
-              backgroundSize: "cover",
+              // backgroundColor: (t) =>
+              //   t.palette.mode === "light"
+              //     ? t.palette.grey[50]
+              //     : t.palette.grey[900],
+              backgroundSize: "contain",
+              backgroundColor:'#FFB103',
               backgroundPosition: "center",
             }}
           />
