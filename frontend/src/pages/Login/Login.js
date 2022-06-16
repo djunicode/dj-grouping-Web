@@ -54,7 +54,7 @@ export default function Login() {
         title: "Login Successful!",
         // text: "Check your mail for email verification",
       });
-      navigate("/createprofile");
+      navigate("/createpfp");
     }
   };
 
