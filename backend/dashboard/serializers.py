@@ -1,4 +1,6 @@
-from dataclasses import field
+import re
+from tokenize import group
+from django.http import JsonResponse
 from rest_framework import serializers
 from .models import *
 
@@ -15,7 +17,7 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model=Group
         fields=["group_id","group_individual","group_name",
-        "group_desc","group_members","joining_sap",
+        "group_desc","group_members",
         "group_picture"]
 
 
@@ -67,17 +69,50 @@ class InterestSerializer(serializers.ModelSerializer):
         model=Interest
         fields=['name']
 
-class GroupSuggestedSerializer(serializers.ModelSerializer):
+class UserRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model=GroupSuggestions
-        fields="__all__"
+        model=UserGroupRequest
+        fields='__all__'
 
-class UserSuggestedSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=UserSuggested
-        fields="__all__"
 
-class UserJoinedSerializer(serializers.ModelSerializer):
+class UserGroupRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model=UserJoined
-        fields="__all__"
+        model=UserGroupRequest
+        fields='__all__'
+    
+    def accept(self, validated_data):
+        try:
+            request = UserGroupRequest.objects.get(user = validated_data['user'].pk, group = validated_data['group'].group_id)
+            group = Group.objects.get(group_id = validated_data['group'].group_id)
+            user = UserProfile.objects.get(pk = validated_data['user'].pk)
+            print(request.join)
+            if not request.join:
+                group.group_individual.add(user)
+                group.save()
+                request.delete()
+                return group
+            else:
+                return {
+                    "error": "Bad Request"
+                }
+        except:
+            return {
+                "error": "Requested User or Group is not present"
+            }
+
+    def reject(self, validated_data):
+        try:
+            request = UserGroupRequest.objects.get(user = validated_data['user'].pk, group = validated_data['group'].group_id)
+            group = Group.objects.get(group_id = validated_data['group'].group_id)
+            user = UserProfile.objects.get(pk = validated_data['user'].pk)
+            if not request.join:
+                request.delete()
+                return group
+            else:
+                return {
+                    "error": "Bad Request"
+                }
+        except:
+            return {
+                "error": "Requested User or Group is not present"
+            }

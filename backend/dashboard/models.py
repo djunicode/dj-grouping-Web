@@ -33,7 +33,16 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        filename = '{}{}{}.{}'.format(instance.first_name,instance.last_name,instance.year_of_passing,ext)
+        try:
+            filename = '{}{}{}.{}'.format(instance.first_name,instance.last_name,instance.year_of_passing,ext)
+        except:
+            try:
+                filename = '{}.{}'.format(instance.group_name,ext)
+            except:
+                try:
+                    filename = '{}.{}'.format(instance.event_name,ext)
+                except:
+                    raise Exception()
         return os.path.join(self.path, filename)
 
 
@@ -49,7 +58,7 @@ class UserProfile(models.Model):
     profile_pic     = models.ImageField(upload_to=PathAndRename('profile/'),default='profile/default.jpg')
     barcode         = models.ImageField(upload_to=PathAndRename('barcode/'),blank=True,null=True)
     bio             = models.TextField()
-
+    
     def __str__(self):
         return self.first_name+self.last_name
 
@@ -87,7 +96,7 @@ class OceanQuestion(models.Model):
     question = models.TextField()
 
     def __str__(self):
-        return (self.persontrait + str(self.pk))
+        return str(self.pk)
 
 class OceanAnswer(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -97,48 +106,16 @@ class OceanAnswer(models.Model):
 
 
 class Group(models.Model):
-    group_individual=models.ManyToManyField(UserProfile,blank=True)
+    group_individual=models.ManyToManyField(UserProfile, blank=True)
     group_id= models.AutoField(primary_key=True)
     group_name= models.CharField(max_length=255,blank=False, unique=True)
     group_desc=models.CharField(max_length=255)
     group_members=models.IntegerField(default=4)
-    joining_sap=models.IntegerField(default=100)
-    group_picture=models.ImageField (upload_to=PathAndRename('images/'),default='images/default.jpg')
+    group_picture=models.ImageField(upload_to=PathAndRename('groups/'),default='groups/default.jpg')
+
     def __str__(self):
         return self.group_name
 
-class GroupSuggestions(models.Model):
-    group_sugges_id=models.AutoField(primary_key=True)
-    group=models.OneToOneField(Group,on_delete=models.CASCADE)
-    users=models.ManyToManyField(UserProfile,blank=True)
-    def __str__(self):
-        return self.group.group_name
-@receiver(post_save, sender =Group)
-def create_GroupSuggestions(sender,instance = None, created = False, **kwargs):
-    if created:
-        GroupSuggestions.objects.create(group=instance)
-
-
-class UserSuggested(models.Model):
-    user=models.OneToOneField(UserProfile,on_delete=models.CASCADE)
-    suggested_groups=models.ManyToManyField(Group, blank=True)
-    def __str__(self):
-        return self.user.first_name
-@receiver(post_save, sender =UserProfile)
-def create_UserSuggestion(sender,instance = None, created = False, **kwargs):
-    if created:
-        up_inst = UserProfile.objects.get(user=instance)
-        UserSuggested.objects.create(user=up_inst)
-
-class UserJoined(models.Model):
-    user=models.OneToOneField(UserProfile,on_delete=models.CASCADE)
-    groups=models.ManyToManyField(Group, blank=True)
-    def __str__(self):
-        return self.user.first_name
-def create_UserJoined(sender,instance = None, created = False, **kwargs):
-    if created:
-        up_inst = UserProfile.objects.get(user=instance)
-        UserSuggested.objects.create(user=up_inst)
 
 
 class Event(models.Model):
@@ -148,7 +125,7 @@ class Event(models.Model):
     event_start_date= models.DateField(auto_now_add=False)
     event_end_date =models.DateField(auto_now_add=False)
     event_commitee =models.CharField(max_length=255, blank=False)
-    event_picture=models.ImageField (upload_to=PathAndRename('events/'),default='events/uicode.png')
+    event_picture=models.ImageField(upload_to=PathAndRename('events/'),default='events/unicode.jpg')
     event_groups = models.ManyToManyField(Group ,blank= True)
     def __str__(self):
         return self.event_name
@@ -168,8 +145,7 @@ class EventRegisteration(models.Model):
     eve_id=models.IntegerField(blank=True)
     event= models.ForeignKey(Event,null=True,blank=True,on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.grp_name
+    
 
 
 class AllEventsForGroup(models.Model):
@@ -185,12 +161,15 @@ class AllEventsForUser(models.Model):
     group_events= models.ManyToManyField(Event)
 
     def __str__(self):
-        return self.user_name.email
+        return self.user_name.first_name + self.user_name.last_name
 
-class AllGroupsForUser(models.Model):
-    AGFU_id=models.AutoField(primary_key=True)
-    user=models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    groups=models.ManyToManyField(Group)
+class UserGroupRequest(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    join = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user.sap_id) + " " + str(self.group.group_id)
 
 
 @receiver(post_save, sender =Group)
@@ -203,6 +182,5 @@ def create_AEFG(sender,instance = None, created = False, **kwargs):
 @receiver(post_save, sender =UserProfile)
 def create_AEFU(sender,instance = None, created = False, **kwargs):
     if created:
-        up_inst = UserProfile.objects.get(user=instance)
-        AllEventsForUser.objects.create(user_name=up_inst)
+        AllEventsForUser.objects.create(user_name=instance)
 

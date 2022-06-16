@@ -40,23 +40,6 @@ class GroupChangeAPI(APIView):
         if serializer.is_valid():
             #print(request.data['group_individual'])
             serializer.save()
-            curr_grp=Group.objects.get(group_id=pk)
-            curr_user=UserProfile.objects.get(sap_id=int(request.data['joining_sap']))
-            curr_grp.group_individual.add(*[curr_user])
-            curr_grp.save()
-            # REMOVAL FROM SUGGESTED GROUP MEMBERS
-            sugg_grp=GroupSuggestions.objects.get(group=curr_grp)
-            for users in sugg_grp.users.all():
-                if users==curr_user:
-                    sugg_grp.users.remove(curr_user)
-            # REMOVAL FROM USER SUGGESTIONS
-            sugg_user=UserSuggested.objects.get(user=curr_user)
-            for grps in sugg_user.suggested_groups.all():
-                if grps==curr_grp:
-                    sugg_user.suggested_groups.remove(curr_grp)
-            # ADDING IN FORMED GRPS
-            joined_user=UserJoined.objects.get(user=curr_user)
-            joined_user.groups.add(*[curr_grp])
             #print(request.data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -113,7 +96,7 @@ class EventRegisterationsAPI(generics.ListCreateAPIView):
             curr_er=EventRegisteration.objects.get(er_id=serializer.data['er_id'])
             # TO GET CURRENT USER
             curr_user_id=serializer.data['sap_id']
-            curr_user=UserProfile.objects.get(user_id=int(curr_user_id))
+            curr_user=UserProfile.objects.get(sap_id=int(curr_user_id))
             # SETTING USER IN THE MODEL
             curr_er.user=curr_user
             # TO GET THE GRP NAME
@@ -190,32 +173,27 @@ class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gener
             interest.save()
         return JsonResponse({'status':'created'}, status=status.HTTP_201_CREATED)
 
-# GROUP SUGGESTIONS
-class GroupSuggestedAPI(generics.ListCreateAPIView):
-    queryset=GroupSuggestions.objects.all()
-    serializer_class=GroupSuggestedSerializer
+class UserRequestsView(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserRequestSerializer
 
-class GroupSuggestedUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset=GroupSuggestions.objects.all()
-    serializer_class=GroupSuggestedSerializer
+    def get_queryset(self):
+        return UserGroupRequest.objects.filter(user = self.kwargs['user_id'])
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
+class UserGroupRequestView(mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = UserGroupRequestSerializer
+    queryset = UserGroupRequest.objects.all()
 
-# USERSUGGESTIONS
-
-class UserSuggestedAPI(generics.ListCreateAPIView):
-    queryset=UserSuggested.objects.all()
-    serializer_class=UserSuggestedSerializer
-
-class UserSuggestedUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset=UserSuggested.objects.all()
-    serializer_class=UserSuggestedSerializer
-
-# USERJOINED
-
-class UserJoinedAPI(generics.ListCreateAPIView):
-    queryset=UserJoined.objects.all()
-    serializer_class=UserJoinedSerializer
-
-class UserJoinedUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset=UserJoined.objects.all()
-    serializer_class=UserJoinedSerializer
+    def post(self, request, *args, **kwargs):
+        serializer = UserGroupRequestSerializer(data = request.data)
+        if serializer.is_valid():
+            temp = dict(serializer.validated_data)
+            if temp['join']:
+                serializer.accept(serializer.validated_data)
+                return JsonResponse({'status':'Group request accepted'}, status=status.HTTP_200_OK)
+            else:
+                serializer.reject(serializer.validated_data)
+                return JsonResponse({'status':'Group request rejected'}, status=status.HTTP_200_OK)
+        return JsonResponse({'error':'Server Problem'}, status=status.HTTP_400_BAD_REQUEST)

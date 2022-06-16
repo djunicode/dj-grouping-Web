@@ -15,10 +15,6 @@ urlpatterns = [
     path('userprofile/',UserProfileAPI.as_view()),
     path('userprofile-update/<int:pk>/',UserProfileUpdateAPI.as_view()),
     path('interest/<str:sap>/',InterestAPI.as_view()),
-    path('groupsuggestions/',GroupSuggestedAPI.as_view()),
-    path('groupsuggestionsupdate/<str:pk>/',GroupSuggestedUpdateAPI.as_view()),
-    path('usersuggestions/',UserSuggestedAPI.as_view()),
-    path('usersuggestionsupdate/<str:pk>/',UserSuggestedUpdateAPI.as_view()),
-    path('userjoined/',UserJoinedAPI.as_view()),
-    path('userjoinedupdate/<str:pk>/',UserJoinedUpdateAPI.as_view()),
+    path('alluserreq/<int:user_id>/',UserRequestsView.as_view()),
+    path('groupreq/',UserGroupRequestView.as_view()),
 ]
