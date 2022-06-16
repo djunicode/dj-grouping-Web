@@ -48,6 +48,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
+
 fetch("http://omshukla.pythonanywhere.com/dashboard/userprofile-update/1/", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
