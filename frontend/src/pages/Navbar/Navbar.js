@@ -151,7 +151,7 @@ const Navbar = () => {
             </div>
           </Box>
           <Avatar className="avatar">
-            <Link to="/profile/2">
+            <Link to="/profile/2" style={{textDecoration:"none"}}>
               R
             </Link>
           </Avatar>
