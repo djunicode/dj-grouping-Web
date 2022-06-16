@@ -108,7 +108,7 @@ class OceanAnswersView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.
     serializer_class = OceanAnswerSerializer
 
     def get_queryset(self):
-        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        user_pro = UserProfile.objects.get(pk=self.kwargs['user_id'])
         return OceanAnswer.objects.filter(user=user_pro)
     
     def get(self, request, *args, **kwargs):
@@ -130,7 +130,7 @@ class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gener
     serializer_class = InterestSerializer
     
     def get_queryset(self):
-        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        user_pro = UserProfile.objects.get(pk=self.kwargs['user_id'])
         return Interest.objects.filter(user = user_pro)
     
     def get(self, request, *args, **kwargs):
@@ -138,7 +138,7 @@ class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gener
 
     def post(self, request, *args, **kwargs):
         names = request.data['name']
-        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        user_pro = UserProfile.objects.get(pk=self.kwargs['user_id'])
         for name in names:
             interest = Interest(user=user_pro, name=name)
             interest.save()
