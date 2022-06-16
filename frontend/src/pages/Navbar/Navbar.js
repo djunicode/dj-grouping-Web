@@ -91,7 +91,7 @@ const Navbar = () => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <GrGroup style={{ fontSize: "3rem", color:"white"}} />
+          <GrGroup style={{ fontSize: "3rem", color: "white" }} />
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <React.Fragment key={anchor}>
@@ -151,7 +151,9 @@ const Navbar = () => {
             </div>
           </Box>
           <Avatar className="avatar">
-            R
+            <Link to="/profile/2" style={{textDecoration:"none"}}>
+              R
+            </Link>
           </Avatar>
         </Toolbar>
       </Container>

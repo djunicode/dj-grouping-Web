@@ -1,11 +1,19 @@
+@import "../../styles/variables.scss";
+
 .profile {
   padding: 3% 5%;
+  height: 100vh;
   .profile_heading {
     color: white;
   }
   .profile_subheading {
     color: white;
     padding-bottom: 2%;
+  }
+  .profile_grid {
+    @media screen and (max-width: $medium) {
+      padding-top: 40px !important;
+    }
   }
   .profile_interests {
     color: #256edd;
