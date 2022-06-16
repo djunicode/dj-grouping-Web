@@ -4,7 +4,7 @@ import "./Profile.scss";
 
 const Profile = () => {
   return (
-    <div style={{ backgroundColor: "#151C20" }} className="profile">
+    <div style={{ backgroundColor: "#151C20"}} className="profile">
       <Typography
         gutterBottom
         variant="h4"
@@ -32,7 +32,7 @@ const Profile = () => {
                   columns={{ xs: 4, sm: 8, md: 12 }}
                 >
                   {Array.from(Array(8)).map((_, index) => (
-                    <Grid item xs={2} sm={4} md={3} key={index}>
+                    <Grid item xs={12} sm={4} md={3} key={index} className="profile_grid">
                       <div className="profile_interests">Photography</div>
                     </Grid>
                   ))}
@@ -50,7 +50,7 @@ const Profile = () => {
                   columns={{ xs: 4, sm: 8, md: 12 }}
                 >
                   {Array.from(Array(8)).map((_, index) => (
-                    <Grid item xs={2} sm={4} md={3} key={index}>
+                    <Grid item xs={12} sm={4} md={3} key={index} className="profile_grid">
                       <div className="profile_interests">Photography</div>
                     </Grid>
                   ))}
