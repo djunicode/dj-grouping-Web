@@ -120,7 +120,7 @@ const Profile_Create = () => {
                           name="first_name"
                           // placeholder={details.first_name}
                           // type="email"
-                          required
+                          // required
                           style={{ color: "black" }}
                         />
                       </Grid>
@@ -130,7 +130,7 @@ const Profile_Create = () => {
                           name="last_name"
                           // placeholder={details.last_name}
                           // type="email"
-                          required
+                          // required
                           style={{ color: "black" }}
                         />
                       </Grid>
@@ -169,7 +169,7 @@ const Profile_Create = () => {
                           name="bio"
                           multiline
                           placeholder="Add bio"
-                          required
+                          // required
                         />
                       </Grid>
                       <Grid item md={6} xs={12}>
