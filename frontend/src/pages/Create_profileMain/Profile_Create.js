@@ -39,7 +39,8 @@ const FORM_VALIDATION = Yup.object().shape({
 const Profile_Create = () => {
   const navigate = useNavigate()
   const [details, setDetails] = useState([]);
- 
+  const [notes, setNotes] = useState([]);
+
 
   return (
     <div style={{ backgroundColor: "#F8F8F8" }}>
@@ -71,45 +72,44 @@ const Profile_Create = () => {
                   initialValues={{ ...INITIAL_FORM_STATE }}
                   validationSchema={FORM_VALIDATION}
                   onSubmit={(values) => {
+                    console.log(notes);
                     var data = JSON.stringify({
-                      email_id: `${details.email}`,
+                      first_name: `${values.first_name}`,
+                      last_name: `${values.last_name}`,
                       phone_no: `+91${values.phone}`,
                       sap_id: `${values.sapId}`,
                       current_year: `${values.year}`,
-                      department: `${values.branch}`,
-                      domains: `${values.domains}`,
-                      skills: `${values.skills}`,
-                      resume_drive_link: `${values.resume}`,
-                      project_drive_link: `${values.project}`,
-                      graduation_year: "2024",
+                      branch: `${values.branch}`,
                       user: `${localStorage.getItem("id")}`,
+                      bio: `${values.bio}`,
+                      barcode: notes,
                     });
 
                     console.log(data);
                     navigate("/interest");
-                //     var config = {
-                //       method: "POST",
-                //       url: "http://djacmdev.pythonanywhere.com/if/student",
-                //       headers: {
-                //         "Content-Type": "application/json",
-                //         Authorization: `Token ${localStorage.getItem("token")}`,
-                //       },
-                //       data: data,
-                //     };
+                    //     var config = {
+                    //       method: "POST",
+                    //       url: "http://djacmdev.pythonanywhere.com/if/student",
+                    //       headers: {
+                    //         "Content-Type": "application/json",
+                    //         Authorization: `Token ${localStorage.getItem("token")}`,
+                    //       },
+                    //       data: data,
+                    //     };
 
-                //     axios(config)
-                //       .then(function (response) {
-                //         console.log(JSON.stringify(response.data));
-                //         navigate('/dashboard')
-                //         Swal.fire({
-                //           title: "Profile Saved!",
-                //           icon: "success",
-                //           // confirmButtonText: 'Cool'
-                //         });
-                //       })
-                //       .catch(function (error) {
-                //         console.log(error);
-                //       });
+                    //     axios(config)
+                    //       .then(function (response) {
+                    //         console.log(JSON.stringify(response.data));
+                    //         navigate('/dashboard')
+                    //         Swal.fire({
+                    //           title: "Profile Saved!",
+                    //           icon: "success",
+                    //           // confirmButtonText: 'Cool'
+                    //         });
+                    //       })
+                    //       .catch(function (error) {
+                    //         console.log(error);
+                    //       });
                   }}
                 >
                   <Form>
@@ -118,7 +118,7 @@ const Profile_Create = () => {
                         <div>First Name</div>
                         <TextField
                           name="first_name"
-                          placeholder={details.first_name}
+                          // placeholder={details.first_name}
                           // type="email"
                           required
                           style={{ color: "black" }}
@@ -128,7 +128,7 @@ const Profile_Create = () => {
                         <div>Last Name</div>
                         <TextField
                           name="last_name"
-                          placeholder={details.last_name}
+                          // placeholder={details.last_name}
                           // type="email"
                           required
                           style={{ color: "black" }}
@@ -169,15 +169,18 @@ const Profile_Create = () => {
                           name="bio"
                           multiline
                           placeholder="Add bio"
-                        required
+                          required
                         />
                       </Grid>
                       <Grid item md={6} xs={12}>
-                        <div>user</div>
-                        <TextField
-                          name="user"
-                          placeholder="user"
-                        required
+                        <div>Barcode</div>
+                        <input
+                          name="barcode"
+                          type='file'
+                          onChange={(e) => { 
+                            console.log(e.target.files[0]);
+                            setNotes(e.target.files[0]) }}
+                          placeholder="barcode"
                         />
                       </Grid>
 
