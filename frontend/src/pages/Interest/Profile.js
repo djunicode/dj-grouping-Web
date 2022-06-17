@@ -1,8 +1,19 @@
-import React from "react";
+import React,{ useEffect, useState } from "react";
 import { Typography, Card, CardContent, Box, Grid, Button } from "@mui/material";
 import "./Profile.scss";
 
-const Profile = () => {
+const Interest = () => {
+  const [data,setData]=useState()
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  useEffect(()=>{
+  fetch("http://omshukla.pythonanywhere.com/dashboard/interest/4/", requestOptions)
+    .then(response => response.json())
+    .then(result => setData(result))
+    .catch(error => console.log('error', error));
+  },[])
   return (
     <div style={{ backgroundColor: "#151C20" }} className="profile">
       <Typography
@@ -11,7 +22,7 @@ const Profile = () => {
         component="div"
         className="profile_heading"
       >
-        Create Your Profile
+        Create Your Profile by adding Interests
       </Typography>
       <Box
         sx={{
@@ -20,20 +31,22 @@ const Profile = () => {
         }}
       >
         <Card sx={{ padding: "0% 2%", backgroundColor: "#101619" }}>
+        {data?
           <CardContent>
             <div className="profile_interests_div">
               <Typography variant="h5" className="profile_subheading">
                 Select your Interests
               </Typography>
               <Box sx={{ flexGrow: 1 }}>
+                
                 <Grid
                   container
                   spacing={{ xs: 2, md: 5 }}
                   columns={{ xs: 4, sm: 8, md: 12 }}
                 >
-                  {Array.from(Array(8)).map((_, index) => (
+                  {data.slice(0,8).map((item, index) => (
                     <Grid item xs={2} sm={4} md={3} key={index}>
-                      <div className="profile_interests">Photography</div>
+                      <div className="profile_interests"><Button value={item.name} onClick={(e)=>{console.log(e.target.value)}}>{item.name}</Button></div>
                     </Grid>
                   ))}
                 </Grid>
@@ -49,9 +62,9 @@ const Profile = () => {
                   spacing={{ xs: 2, md: 5 }}
                   columns={{ xs: 4, sm: 8, md: 12 }}
                 >
-                  {Array.from(Array(8)).map((_, index) => (
+                  {data.slice(8,-1).map((item, index) => (
                     <Grid item xs={2} sm={4} md={3} key={index}>
-                      <div className="profile_interests">Photography</div>
+                      <div className="profile_interests"><Button>{item.name}</Button></div>
                     </Grid>
                   ))}
                 </Grid>
@@ -59,10 +72,11 @@ const Profile = () => {
             </div>
             <Button className="profile_button">Proceed</Button>
           </CardContent>
+          :<h1>Loading....</h1>}
         </Card>
       </Box>
     </div>
   );
 };
 
-export default Profile;
+export default Interest;

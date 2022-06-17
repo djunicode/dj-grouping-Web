@@ -16,7 +16,7 @@
 .boxProp{
     padding:0 0 0 0;
     width: 100%;
-    height: 100vh;
+    // height: 100vh;
     background-color: #101619;
     display:flex;
     align-items:flex-start;
@@ -24,3 +24,16 @@
     z-index:-9;
     font-family:"Poppins",
 }
+
+.QnA_button { 
+    background-color: #ffc800 !important;
+    border-radius: 20px !important;
+    padding: 1% 5% !important;
+    float: right;
+    text-transform: none !important;
+    margin-top: 5% !important;
+    margin-bottom: 5% !important;
+    &:hover {
+      background-color: #ffc800 !important;
+    }
+  }
