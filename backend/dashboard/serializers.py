@@ -1,3 +1,6 @@
+import re
+from tokenize import group
+from django.http import JsonResponse
 from rest_framework import serializers
 from .models import *
 
@@ -59,3 +62,51 @@ class InterestSerializer(serializers.ModelSerializer):
     class Meta:
         model=Interest
         fields=['name']
+
+class UserRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UserGroupRequest
+        fields='__all__'
+
+
+class UserGroupRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UserGroupRequest
+        fields='__all__'
+    
+    def accept(self, validated_data):
+        try:
+            request = UserGroupRequest.objects.get(user = validated_data['user'].pk, group = validated_data['group'].group_id)
+            group = Group.objects.get(group_id = validated_data['group'].group_id)
+            user = UserProfile.objects.get(pk = validated_data['user'].pk)
+            print(request.join)
+            if not request.join:
+                group.group_individual.add(user)
+                group.save()
+                request.delete()
+                return group
+            else:
+                return {
+                    "error": "Bad Request"
+                }
+        except:
+            return {
+                "error": "Requested User or Group is not present"
+            }
+
+    def reject(self, validated_data):
+        try:
+            request = UserGroupRequest.objects.get(user = validated_data['user'].pk, group = validated_data['group'].group_id)
+            group = Group.objects.get(group_id = validated_data['group'].group_id)
+            user = UserProfile.objects.get(pk = validated_data['user'].pk)
+            if not request.join:
+                request.delete()
+                return group
+            else:
+                return {
+                    "error": "Bad Request"
+                }
+        except:
+            return {
+                "error": "Requested User or Group is not present"
+            }

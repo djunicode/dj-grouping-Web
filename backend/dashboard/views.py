@@ -108,7 +108,7 @@ class OceanAnswersView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.
     serializer_class = OceanAnswerSerializer
 
     def get_queryset(self):
-        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        user_pro = UserProfile.objects.get(pk=self.kwargs['user_id'])
         return OceanAnswer.objects.filter(user=user_pro)
     
     def get(self, request, *args, **kwargs):
@@ -130,7 +130,7 @@ class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gener
     serializer_class = InterestSerializer
     
     def get_queryset(self):
-        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        user_pro = UserProfile.objects.get(pk=self.kwargs['user_id'])
         return Interest.objects.filter(user = user_pro)
     
     def get(self, request, *args, **kwargs):
@@ -138,8 +138,33 @@ class InterestAPI(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gener
 
     def post(self, request, *args, **kwargs):
         names = request.data['name']
-        user_pro = UserProfile.objects.get(sap_id=self.kwargs['sap'])
+        user_pro = UserProfile.objects.get(pk=self.kwargs['user_id'])
         for name in names:
             interest = Interest(user=user_pro, name=name)
             interest.save()
         return JsonResponse({'status':'created'}, status=status.HTTP_201_CREATED)
+
+class UserRequestsView(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserRequestSerializer
+
+    def get_queryset(self):
+        return UserGroupRequest.objects.filter(user = self.kwargs['user_id'])
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class UserGroupRequestView(mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = UserGroupRequestSerializer
+    queryset = UserGroupRequest.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserGroupRequestSerializer(data = request.data)
+        if serializer.is_valid():
+            temp = dict(serializer.validated_data)
+            if temp['join']:
+                serializer.accept(serializer.validated_data)
+                return JsonResponse({'status':'Group request accepted'}, status=status.HTTP_200_OK)
+            else:
+                serializer.reject(serializer.validated_data)
+                return JsonResponse({'status':'Group request rejected'}, status=status.HTTP_200_OK)
+        return JsonResponse({'error':'Server Problem'}, status=status.HTTP_400_BAD_REQUEST)
