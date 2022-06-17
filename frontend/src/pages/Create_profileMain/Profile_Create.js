@@ -191,7 +191,6 @@ const Profile_Create = () => {
                           onChange={(e) => { 
                             console.log(e.target.files[0]);
                             setNotes(e.target.files[0]) }}
-                            // setNotes(URL.createObjectURL(e.target.files[0])) }}
                           placeholder="barcode"
                         />
                       </Grid>
