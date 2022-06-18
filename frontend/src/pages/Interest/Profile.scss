@@ -2,7 +2,7 @@
 
 .profile {
   padding: 3% 5%;
-  height: 100vh;
+  // height: 100vh;
   .profile_heading {
     color: white;
   }
@@ -17,10 +17,30 @@
   }
   .profile_interests {
     color: #256edd;
-    display: inline;
+    // display: inline;
     background-color: #ffffff;
-    border-radius: 20px;
-    padding: 4.5% 15%;
+    border-radius: 30%;
+    // padding: 4.5% 15%;
+    height: 60px;
+    width: 120px;
+    font-size: 2rem;
+    text-align: center;
+  }
+  .profile_interests:hover{
+    background-color: #ffc800;
+    cursor: pointer;
+  }
+  .profile_interests_clicked{
+    color: #256edd;
+    // display: inline;
+    background-color: #ffffff;
+    border-radius: 30%;
+    // padding: 4.5% 15%;
+    height: 60px;
+    width: 120px;
+    font-size: 2rem;
+    text-align: center;
+    cursor: not-allowed;
   }
   .profile_interests_div {
     padding-bottom: 5rem;
@@ -30,6 +50,7 @@
     border-radius: 20px;
     padding: 1% 7%;
     float: right;
+    font-size: 1.2rem;
     text-transform: none;
     margin-top: 5%;
     margin-bottom: 5%;
