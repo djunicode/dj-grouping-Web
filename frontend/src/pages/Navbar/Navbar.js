@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Container from "@mui/material/Container";
 import List from "@mui/material/List";
@@ -17,9 +17,14 @@ import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import "./Navbar.scss";
 import { GrGroup } from "react-icons/gr";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -32,6 +37,13 @@ const Navbar = () => {
     right: false,
   });
 
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
   const anchor = "left";
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -53,17 +65,17 @@ const Navbar = () => {
       style={{ backgroundColor: "black", height: "100%" }}
     >
       <List>
-        <Link to={`/`} style={{ textDecoration: "none" }}>
+        <Link to={`/createpfp`} style={{ textDecoration: "none" }}>
           <ListItem button key="home">
             <ListItemIcon>
               <HiOutlineArrowNarrowRight style={{ color: "white" }} />
             </ListItemIcon>
             <ListItemText>
-              <span style={{ fontSize: "25px", color: "white" }}>Home</span>
+              <span style={{ fontSize: "25px", color: "white" }}>Profile</span>
             </ListItemText>
           </ListItem>
         </Link>
-        {["Dashboard", "Profile"].map((text, index) => (
+        {["Events", "Interest"].map((text, index) => (
           <Link
             to={`/${text.toLowerCase()}`}
             style={{ textDecoration: "none" }}
@@ -79,10 +91,31 @@ const Navbar = () => {
             </ListItem>
           </Link>
         ))}
+        <Link to={`/groupformed`} style={{ textDecoration: "none" }}>
+          <ListItem button key="home">
+            <ListItemIcon>
+              <HiOutlineArrowNarrowRight style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText>
+              <span style={{ fontSize: "25px", color: "white" }}>Groups</span>
+            </ListItemText>
+          </ListItem>
+        </Link>
+        <Link to={`/oceanques`} style={{ textDecoration: "none" }}>
+          <ListItem button key="home">
+            <ListItemIcon>
+              <HiOutlineArrowNarrowRight style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText>
+              <span style={{ fontSize: "25px", color: "white" }}>Questions</span>
+            </ListItemText>
+          </ListItem>
+        </Link>
       </List>
     </Box>
   );
-  //   const name = sessionStorage.getItem("Name").charAt(0).toUpperCase();
+  const name = localStorage.getItem("email").charAt(0).toUpperCase();
+  // console.log(name);
 
   return (
     <AppBar
@@ -139,22 +172,78 @@ const Navbar = () => {
           ></Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <div style={{ margin: "auto" }}>
-              <Link to="/home">
-                <button className="btn">Home</button>
-              </Link>
-              <Link to="/dashboard">
-                <button className="btn">Dashboard</button>
-              </Link>
-              <Link to="/profile">
+              <Link to="/createpfp">
                 <button className="btn">Profile</button>
+              </Link>
+              <Link to="/events">
+                <button className="btn">Events</button>
+              </Link>
+              <Link to="/interest">
+                <button className="btn">Interests</button>
+              </Link>
+              <Link to="/groupformed">
+                <button className="btn">Groups</button>
+              </Link>
+              <Link to="/oceanques">
+                <button className="btn">Questions</button>
               </Link>
             </div>
           </Box>
-          <Avatar className="avatar">
-            <Link to="/profile/2" style={{textDecoration:"none"}}>
-              R
-            </Link>
-          </Avatar>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar className="avatar">
+                  {/* <Link
+                    to="/profile/2"
+                    style={{ textDecoration: "none", color: "white" }}
+                  > */}
+                    {name}
+                  {/* </Link> */}
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography
+                  textAlign="center"
+                  onClick={() => {
+                    navigate("/profile/2");
+                  }}
+                >
+                  Profile
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography
+                  textAlign="center"
+                  onClick={() => {
+                    navigate("/login");
+                    localStorage.removeItem("loginToken");
+                    localStorage.removeItem("userToken");
+                    localStorage.removeItem("user_id");
+                  }}
+                >
+                  Logout
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

@@ -21,7 +21,7 @@ function App() {
             <Route exact path="/login" element={<><Login /></>} />
             <Route exact path="/createpfp" element={<><Profile_Create/></>} />
             <Route exact path="/events" element={<><Navbar/><Events /></>} />
-            <Route exact path="/interest" element={<><Interest/></>} />
+            <Route exact path="/interest" element={<><Navbar/><Interest/></>} />
             <Route exact path="/profile/:id" element={<><Navbar/><ProfileScreen /></>} />
             <Route exact path="/groupformed" element={<><Navbar/><GroupFormed /></>} />
             <Route exact path="/oceanques" element={<><Navbar/><QnA /></>} />
