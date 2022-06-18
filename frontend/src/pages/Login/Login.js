@@ -89,6 +89,7 @@ export default function Login() {
               initialValues={{ ...INITIAL_FORM_STATE }}
               validationSchema={FORM_VALIDATION}
               onSubmit={(values) => {
+                localStorage.setItem("email", values.email);
                 console.log(values);
                 console.log("clicked");
                 dispatch(login(values.email, values.password));
