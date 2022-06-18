@@ -1,29 +1,30 @@
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, Card, CardContent, Box, Grid, Button } from "@mui/material";
 import "./Profile.scss";
 
 const Interest = () => {
-  const data=[]
-  const mainInterests=['Node','Django','PHP','React','Angular','Flutter','react Native','Android','AWS','Google Cloud','Deep learning','NLP']
-  const Interests = ['debating','photography','finance','marketing','editorial','creative','dancing','music','painting','travelling'];
-  const [status,setStatus] =useState(false)
+  const [data, setData] = useState([]);
+  // const data = []
+  const mainInterests = ['Node', 'Django', 'PHP', 'React', 'Angular', 'Flutter', 'react Native', 'Android', 'AWS', 'Google Cloud', 'Deep learning', 'NLP']
+  const Interests = ['debating', 'photography', 'finance', 'marketing', 'editorial', 'creative', 'dancing', 'music', 'painting', 'travelling'];
+  const [status, setStatus] = useState(false)
   const tokenString = localStorage.getItem("user_id");
   const userId = JSON.parse(tokenString);
   console.log(userId)
-  const handleClick=()=>{
-    const finalData={name:data}
-    fetch("http://omshukla.pythonanywhere.com/dashboard/interest/"+userId+"/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body:JSON.stringify(finalData)
-  })
-  .then(response => response.json())
-  .then(result => setStatus(true))
-  .catch(error => console.log('error', error));
-}
-  
+  const handleClick = () => {
+    const finalData = { name: data }
+    fetch("http://omshukla.pythonanywhere.com/dashboard/interest/" + userId + "/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(finalData)
+    })
+      .then(response => response.json())
+      .then(result => setStatus(true))
+      .catch(error => console.log('error', error));
+  }
+
   return (
     <div style={{ backgroundColor: "#151C20" }} className="profile">
       <Typography
@@ -47,7 +48,7 @@ const Interest = () => {
                 Select your Interests
               </Typography>
               <Box sx={{ flexGrow: 1 }}>
-                
+
                 <Grid
                   container
                   spacing={{ xs: 2, md: 5 }}
@@ -55,7 +56,11 @@ const Interest = () => {
                 >
                   {mainInterests.map((item, index) => (
                     <Grid item xs={2} sm={4} md={3} key={index}>
-                      <div className="profile_interests"><Button value={item} onClick={(e)=>{console.log(e.target.value);data.push(e.target.value)}}>{item}</Button></div>
+                      {!data.includes(item) ?
+                        <div className="profile_interests"><Button value={item} onClick={(e) => { console.log(e.target.value); setData([...data, e.target.value]) }}>{item}</Button></div>
+                        :
+                        <div className="profile_interests_clicked"><Button disabled value={item} onClick={(e) => { console.log(e.target.value); setData([...data, e.target.value]) }}>{item}</Button></div>
+                      }
                     </Grid>
                   ))}
                 </Grid>
@@ -73,15 +78,15 @@ const Interest = () => {
                 >
                   {Interests.map((item, index) => (
                     <Grid item xs={2} sm={4} md={3} key={index}>
-                      <div className="profile_interests"><Button value={item} onClick={(e)=>{console.log(e.target.value);data.push(e.target.value)}}>{item}</Button></div>
+                      <div className="profile_interests"><Button value={item} onClick={(e) => { console.log(e.target.value); data.push(e.target.value) }}>{item}</Button></div>
                     </Grid>
                   ))}
                 </Grid>
               </Box>
             </div>
-            {status?
-          <h1 style={{color:"white"}}>Your interests have been updated</h1>:
-            <Button className="profile_button" onClick={handleClick}>Proceed</Button>}
+            {status ?
+              <h1 style={{ color: "white" }}>Your interests have been updated</h1> :
+              <Button className="profile_button" onClick={handleClick}>Proceed</Button>}
           </CardContent>
         </Card>
       </Box>
