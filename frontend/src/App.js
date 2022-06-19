@@ -19,7 +19,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<><SignUp /></>} />
             <Route exact path="/login" element={<><Login /></>} />
-            <Route exact path="/createpfp" element={<><Profile_Create/></>} />
+            <Route exact path="/createpfp" element={<><Navbar/><Profile_Create/></>} />
             <Route exact path="/events" element={<><Navbar/><Events /></>} />
             <Route exact path="/interest" element={<><Navbar/><Interest/></>} />
             <Route exact path="/profile/:id" element={<><Navbar/><ProfileScreen /></>} />
