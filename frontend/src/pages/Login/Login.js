@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Link } from "react-router-dom";
@@ -37,15 +38,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
 
-  const handleSubmit = (event) => {
-    // event.preventDefault();
-    dispatch(login(email, password));
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-
+  useEffect(() => {
     console.log(userLogin);
     console.log(userLogin.error);
 
@@ -57,7 +50,7 @@ export default function Login() {
         title: "Oops...",
         text: "Incorrect password!",
       });
-    } else if (!userLogin.loginToken) {
+    } else if (userLogin.loginToken) {
       console.log(userLogin.loginToken);
 
       Swal.fire({
@@ -66,12 +59,14 @@ export default function Login() {
       });
       navigate("/createpfp");
     }
-  };
+  }, [userLogin, navigate]);
 
   return (
     <ThemeProvider theme={theme}>
       {userLogin.loading === true ? (
         <h1>Loading...</h1>
+      ) : userLogin.error === true ? (
+        <h1>error</h1>
       ) : (
         <Grid container component="main" sx={{ height: "100vh" }}>
           <CssBaseline />
@@ -93,27 +88,6 @@ export default function Login() {
                 console.log(values);
                 console.log("clicked");
                 dispatch(login(values.email, values.password));
-
-                console.log(userLogin);
-                console.log(userLogin.error);
-
-                if (userLogin.error) {
-                  console.log(userLogin.error);
-
-                  Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Incorrect password!",
-                  });
-                } else if (!userLogin.loginToken) {
-                  console.log(userLogin.loginToken);
-
-                  Swal.fire({
-                    icon: "success",
-                    title: "Login Successful!",
-                  });
-                  navigate("/createpfp");
-                }
               }}
             >
               <div className="login">

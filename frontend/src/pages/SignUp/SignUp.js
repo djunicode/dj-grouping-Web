@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "../Create_profileMain/TextField";
@@ -37,26 +38,11 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const userSignup = useSelector((state) => state.signUp);
   // const { loading , error , userToken } = userSignup
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
 
-    dispatch(signup(email, password));
-
-    // const data = new FormData(event.currentTarget);
-    // var requestOptions = {
-    //   method: "POST",
-    //   body: data,
-    //   redirect: "follow",
-    // };
-
-    // fetch(
-    //   "http://omshukla.pythonanywhere.com/accounts/register/",
-    //   requestOptions
-    // )
-    //   .then((response) => response.json())
-    //   .then((result) => {
-    //     console.log(result);
-    //     if (result.old_token)
+  //   dispatch(signup(email, password));
+  useEffect(() => {
     console.log(userSignup);
     console.log(userSignup.error);
 
@@ -68,7 +54,7 @@ export default function SignUp() {
         title: "Oops...",
         text: "Something went wrong!",
       });
-    } else if (!userSignup.userToken) {
+    } else if (userSignup.userToken) {
       console.log(userSignup.userToken);
 
       Swal.fire({
@@ -79,7 +65,9 @@ export default function SignUp() {
 
       navigate("/login");
     }
-  };
+  }, [navigate, userSignup]);
+
+  // };
 
   return (
     <ThemeProvider theme={theme}>
@@ -105,28 +93,6 @@ export default function SignUp() {
                 console.log(values);
                 console.log("clicked");
                 dispatch(signup(values.email, values.password));
-                console.log(userSignup);
-                console.log(userSignup.error);
-
-                if (userSignup.error) {
-                  console.log(userSignup.error);
-
-                  Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
-                  });
-                } else if (!userSignup.userToken) {
-                  console.log(userSignup.userToken);
-
-                  Swal.fire({
-                    icon: "success",
-                    title: "SignUp Successful!",
-                    text: "Check your mail for email verification",
-                  });
-
-                  navigate("/login");
-                }
               }}
             >
               <div className="signup">
@@ -143,68 +109,68 @@ export default function SignUp() {
                 </Typography>
                 <br />
                 <Form>
-                <Box
-                  // component="form"
-                  noValidate
-                  // onSubmit={handleSubmit}
-                  sx={{ mt: 1 }}
-                >
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    style={{ fontFamily: "Poppins" }}
+                  <Box
+                    // component="form"
+                    noValidate
+                    // onSubmit={handleSubmit}
+                    sx={{ mt: 1 }}
                   >
-                    Email
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    id="email"
-                    placeholder="Email"
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="email"
-                    autoFocus
-                    style={{ backgroundColor: "white" }}
-                  />
-                  <br />
-                  <br />
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    style={{ fontFamily: "Poppins" }}
-                  >
-                    Password
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    name="password"
-                    placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    style={{ backgroundColor: "white" }}
-                  />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    style={{ fontSize: "1rem", fontWeight: "600" }}
-                    sx={{
-                      mt: 3,
-                      mb: 2,
-                      color: "#151C20",
-                      "&:hover": {
-                        backgroundColor: "#FFB103",
-                      },
-                    }}
-                  >
-                    Create an account
-                  </Button>
-                  <Link to="/login" className="SignLink">
-                    {"Already have an account? Login"}
-                  </Link>
-                </Box>
+                    <Typography
+                      component="h1"
+                      variant="h6"
+                      style={{ fontFamily: "Poppins" }}
+                    >
+                      Email
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      id="email"
+                      placeholder="Email"
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="email"
+                      autoFocus
+                      style={{ backgroundColor: "white" }}
+                    />
+                    <br />
+                    <br />
+                    <Typography
+                      component="h1"
+                      variant="h6"
+                      style={{ fontFamily: "Poppins" }}
+                    >
+                      Password
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="password"
+                      placeholder="Password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      style={{ backgroundColor: "white" }}
+                    />
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      style={{ fontSize: "1rem", fontWeight: "600" }}
+                      sx={{
+                        mt: 3,
+                        mb: 2,
+                        color: "#151C20",
+                        "&:hover": {
+                          backgroundColor: "#FFB103",
+                        },
+                      }}
+                    >
+                      Create an account
+                    </Button>
+                    <Link to="/login" className="SignLink">
+                      {"Already have an account? Login"}
+                    </Link>
+                  </Box>
                 </Form>
               </div>
             </Formik>

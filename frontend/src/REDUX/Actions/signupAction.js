@@ -15,29 +15,29 @@ export const signup = (email, password) => async (dispatch) => {
       },
     };
 
-    axios
+    const { data } = await axios
       .post(
         "http://omshukla.pythonanywhere.com/accounts/register/",
         { email, password },
         config
       )
-      .then((res) => {
-        if (res.data.email) {
-          console.log(res.data.email);
+      // .then((res) => {
+        if (data.email) {
+          console.log(data.email);
           dispatch({
             type: FAILURE_SIGNUP_TOKEN,
-            payload: res.data.email,
+            payload: data.email,
           });
-        } else if (res.data.old_token) {
-          console.log(res.data.old_token);
+        } else if (data.old_token) {
+          console.log(data.old_token);
 
           dispatch({
             type: SUCCESS_SIGNUP_TOKEN,
-            payload: res.data.old_token,
+            payload: data.old_token,
           });
-          localStorage.setItem("userToken", JSON.stringify(res.data.old_token));
+          localStorage.setItem("userToken", JSON.stringify(data.old_token));
         }
-      });
+      // });
   } catch (error) {
     dispatch({
       type: FAILURE_SIGNUP_TOKEN,

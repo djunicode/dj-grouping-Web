@@ -15,25 +15,23 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    axios
-      .post(
-        "http://omshukla.pythonanywhere.com/accounts/login/",
-        { email, password },
-        config
-      )
-      .then((res) => {
-         if (res.data.token) {
-          console.log(res.data.token);
-          dispatch({
-            type: SUCCESS_LOGIN_TOKEN,
-            payload: res.data.token,
-            user: res.data.user_id
-          });
-          localStorage.setItem("loginToken", JSON.stringify(res.data.token));
-          localStorage.setItem("user_id", JSON.stringify(res.data.user_id));
-        }
-      });
+    const { data } = await axios.post(
+      "http://omshukla.pythonanywhere.com/accounts/login/",
+      { email, password },
+      config
+    );
+
+    console.log(data.token);
+    dispatch({
+      type: SUCCESS_LOGIN_TOKEN,
+      payload: data.token,
+      user: data.user_id,
+    });
+    localStorage.setItem("loginToken", JSON.stringify(data.token));
+    localStorage.setItem("user_id", JSON.stringify(data.user_id));
+    
   } catch (error) {
+    // console.log("fef");
     dispatch({
       type: FAILURE_LOGIN_TOKEN,
       payload:
